@@ -38,23 +38,29 @@ from nav_msgs.msg import Path
 # import about kitti
 import glob
 import os
-import sys
-from pathlib import Path
-import random
+# from pathlib import Path as Path2
+# import random
+current_file_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(current_file_path)
+
 try:
+    '''
     sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
         sys.version_info.major,
         sys.version_info.minor,
         'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
+    '''
+    sys.path.append("/home/bing/carla-ros-bridge/src/ros-bridge/carla_ad_demo/launch/")
+    sys.path.append("/home/bing/carla-ros-bridge/src/ros-bridge/install/carla_waypoint_publisher/lib/python3.8/site-packages/carla_waypoint_publisher/")
+
 except IndexError:
     pass
 
-import carla
 import time
 from datetime import date
 import generator_KITTI as gen
-from carla_msgs.msg import CarlaEgoVehicleInfo
 import traceback
+
 #
 
 class CarlaToRosWaypointConverter(CompatibleNode):
@@ -73,6 +79,12 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         Constructor
         """
         super(CarlaToRosWaypointConverter, self).__init__('carla_waypoint_publisher')
+        # -M def global var client
+        self.carla_client = None
+        self.world = None
+        # init sensors
+        self.counter = 0
+        
         self.connect_to_carla()
         self.map = self.world.get_map()
         self.ego_vehicle = None
@@ -94,8 +106,10 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             '/carla_waypoint_publisher/{}/get_actor_waypoint'.format(self.role_name),
             self.get_actor_waypoint)
 
+
         # set initial goal
-        # M- self.goal = self.world.get_map().get_spawn_points()[0]
+
+        # self.goal = self.world.get_map().get_spawn_points()[0]
         # I have set the initial goal to None, then the car will at state "stop" wenn spawned
         self.goal = None
 
@@ -111,8 +125,12 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         self.loginfo("Waiting for ego vehicle...")
         self.on_tick = self.world.on_tick(self.find_ego_vehicle_actor)
         
+
+        
         # M- subscribe vehicle info in carla
-        self.vehicle_info_sub = rospy.Subscriber('/carla/ego_vehicle/vehicle_info', CarlaEgoVehicleInfo, self.vehicle_info_callback)
+        # self.vehicle_info_sub = rospy.Subscriber('/carla/ego_vehicle/vehicle_info', Car   laEgoVehicleInfo, self.vehicle_info_callback)
+        
+        
 
     def destroy(self):
         """
@@ -253,6 +271,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         self.waypoint_publisher.publish(msg)
         self.loginfo("Published {} waypoints.".format(len(msg.poses)))
+        self.KITTI_gen()
 
     def connect_to_carla(self):
 
@@ -269,75 +288,68 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         host = self.get_param("host", "127.0.0.1")
         port = self.get_param("port", 2000)
-        timeout = self.get_param("timeout", 10)
+        timeout = self.get_param("timeout", 1000)
         self.loginfo("CARLA world available. Trying to connect to {host}:{port}".format(
             host=host, port=port))
 
-        carla_client = carla.Client(host=host, port=port)
-        carla_client.set_timeout(timeout)
+        # carla_client = carla.Client(host=host, port=port)
+        # carla_client.set_timeout(timeout)
+        # M- use global class var client
+        self.carla_client = carla.Client(host=host, port=port)
+        self.carla_client.set_timeout(timeout)
 
         try:
-            self.world = carla_client.get_world()
+            # M- also, var client
+            self.world = self.carla_client.get_world()
         except RuntimeError as e:
             self.logerr("Error while connecting to Carla: {}".format(e))
             raise e
 
         self.loginfo("Connected to Carla.")
+        settings = self.world.get_settings()
+        '''
+        settings.synchronous_mode = True
+        settings.fixed_delta_seconds = 0.05
+        settings.no_rendering_mode = False
+        '''
+
+        self.world.apply_settings(settings)
     # M-
     def vehicle_info_callback(self, msg):
         self.vehicle_id = msg.id  # 存储车辆的ID供后续使用
-
-def main(args=None):
-    """
-    main function
-    """
-    roscomp.init('carla_waypoint_publisher', args)
-
-    waypoint_converter = None
-    try:
-        waypoint_converter = CarlaToRosWaypointConverter()
-        waypoint_converter.spin()
-    except (RuntimeError, ROSException):
-        pass
-    except KeyboardInterrupt:
-        roscomp.loginfo("User requested shut down.")
-    finally:
-        roscomp.loginfo("Shutting down.")
-        if waypoint_converter:
-            waypoint_converter.destroy()
-        roscomp.shutdown()
         
-    ######################
-    #############NEW about KITTI
-    ######################    
-    start_record_full = time.time()
-    time_stop = 2.0
-    nbr_frame = 3000 #MAX = 100000
-    nbr_walkers = 0
-    nbr_vehicles = 0
+    def KITTI_gen(self):
+    ############# NEW about KITTI
+        # M- establish the vars and sensors, only once
+  
+        start_record_full = time.time()
+        time_stop = 2.0
+        nbr_frame = 200 #MAX = 100000
+        nbr_walkers = 0
+        nbr_vehicles = 0
 
-    actor_list = []
-    vehicles_id_list = []
-    all_walkers_id = []
-    vehicles_list = []
+        actor_list = []
+        vehicles_id_list = []
+        all_walkers_id = []
+        vehicles_list = []
     
-    init_settings = None
-
-    try:
+        init_settings = None
+        print("start KITTI generator")
         # M- def new class to generate data KITTI
-        generator = CarlaToRosWaypointConverter()
+        # generator = CarlaToRosWaypointConverter()
         
         # M-
         # client = carla.Client('localhost', 2000)
-        client = generator.carla_client
+        client = self.carla_client
         
         init_settings = carla.WorldSettings()
-        client.set_timeout(100.0)
-        print("Set town10 as our map!")
+        # client.set_timeout(100.0)
+        print("Set town10 as our map!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         # print(client.get_available_maps())
 
         # world = client.get_world()
-        world = client.load_world("Town10HD")
+        world = self.world
+        # world = client.load_world("Town10HD")
         # folder_output = "/media/stuf/data/Dataset_BrandNew%s/%s/generated" %(client.get_client_version(), world.get_map().name)
         folder_output = "//home/bing/Pictures/generator/Dataset_BrandNew%s/%s/generated" %(client.get_client_version(), world.get_map().name)
         os.makedirs(folder_output) if not os.path.exists(folder_output) else [os.remove(f) for f in glob.glob(folder_output+"/*") if os.path.isfile(f)]
@@ -359,32 +371,34 @@ def main(args=None):
 
 
         # Set Synchronous mode
+        
+        '''
         settings = world.get_settings()
         settings.synchronous_mode = True
         settings.fixed_delta_seconds = 0.01
         settings.no_rendering_mode = False
+
         world.apply_settings(settings)
         '''
+            
+        
+        '''
         # Create our vehicle
-        blueprint_library = world.get_blueprint_library()
+        blueprint_librardescribe_sub_entitiesy = world.get_blueprint_library()
         bp_MyCar = blueprint_library.find('vehicle.lincoln.mkz_2020')
         bp_MyCar.set_attribute('color', '228, 239, 241')
         bp_MyCar.set_attribute('role_name', 'MyCar')
 
         #Our vehicle's start pose
         start_pose = random.choice(world.get_map().get_spawn_points())#
-        '''
-        # set goal
-        # end_point = random.choice(world.get_map().get_spawn_points())
-        # road_option = carla.RoadOption.LANEFOLLOW  # 设定车辆跟随道路行驶
-        # route = world.get_map().calculate_shortest_route(start_pose.location, end_point.location, road_option)
-        '''
+        
         start_pose_str = '127.4, -195.4, 2, 0, 0, 180'
         start_pose_values = [float(x) for x in start_pose_str.split(',')]
 
         location = carla.Location(x=start_pose_values[0], y=start_pose_values[1], z=start_pose_values[2])
         rotation = carla.Rotation(pitch=start_pose_values[3], yaw=start_pose_values[4], roll=start_pose_values[5])
         start_pose = carla.Transform(location, rotation)
+        '''
         '''
         def find_ego_vehicle_actor():
             """
@@ -397,8 +411,9 @@ def main(args=None):
                     break
 
             return hero
+        '''
         # MyCar = find_ego_vehicle_actor()
-        MyCar = generator.ego_vehicle
+        MyCar = self.ego_vehicle
         actor_list.append(MyCar)
         print('Created %s' % MyCar)
 
@@ -411,12 +426,14 @@ def main(args=None):
         #Set instance id
         # world.set_instance_tagging_style("actor_id")
 
+        '''
         # Wait for MyCar to stop
         start = world.get_snapshot().timestamp.elapsed_seconds
         print("Waiting for MyCar to stop ...")
         while world.get_snapshot().timestamp.elapsed_seconds-start < time_stop: world.tick()
         print("MyCar stopped")
-
+        '''
+        
         # Set sensors transformation from MyCar
         lidar_transform     = carla.Transform(carla.Location(x=0, y=0, z=1.80))
         left_transform = carla.Transform(carla.Location(x=2.0, y=-0.2, z=1.4))
@@ -428,22 +445,23 @@ def main(args=None):
         #gen.screenshot(MyCar, world, actor_list, folder_output, carla.Transform(carla.Location(x=0.0, y=0, z=2.0), carla.Rotation(pitch=0, yaw=0, roll=0)))
 
         # Create our sensors
+        # M- IS and optical flow not supported
         gen.RGB_left.sensor_id_glob = 0
         gen.RGB_right.sensor_id_glob = 0
-        gen.IS.sensor_id_glob = 10
+        # gen.IS.sensor_id_glob = 10
         gen.Depth.sensor_id_glob = 20
         gen.HDL64E.sensor_id_glob = 100
         gen.IMU.sensor_id_glob = 0
-        gen.Optical.sensor_id_glob = 0
+        # gen.Optical.sensor_id_glob = 0
 
         VelodyneHDL64 = gen.HDL64E(MyCar, world, actor_list, folder_output, lidar_transform)
         RGB_left = gen.RGB_left(MyCar, world, actor_list, folder_output, left_transform)
         RGB_right = gen.RGB_right(MyCar, world, actor_list, folder_output, right_transform)
-        ins_segmc = gen.IS(MyCar, world, actor_list, folder_output, right_transform)
+        # ins_segmc = gen.IS(MyCar, world, actor_list, folder_output, right_transform)
         # depth = gen.Depth(MyCar, world, actor_list, folder_output, right_transform)
         originDepth = gen.Original_Depth(MyCar, world, actor_list, folder_output, right_transform)
         normals = gen.Normal(MyCar, world, actor_list, folder_output, right_transform)
-        optical = gen.Optical(MyCar, world, actor_list, folder_output, right_transform)
+        # optical = gen.Optical(MyCar, world, actor_list, folder_output, right_transform)
         IMU = gen.IMU(MyCar, world, actor_list, folder_output, right_transform)
         SemSeg = gen.SS(MyCar, world, actor_list, folder_output, right_transform)
     
@@ -470,14 +488,17 @@ def main(args=None):
         # MyCar.set_autopilot(True)
 
         # Pass to the next simulator frame to spawn sensors and to retrieve first data
-        world.tick()
+        self.world.tick()
         
         # VelodyneHDL64.init()
         gen.follow(MyCar.get_transform(), world)
-        
-
-        
-      
+        self.counter += 1
+        print("KITTI FIRST finished! init finished!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    
+    
+    
+    
+        print("KITTI record beginning!!!!!!!!!!! !!!!!!!!!!!!!!!!!")
         # All sensors produce first data at the same time (this ts)
         gen.Sensor.initial_ts = world.get_snapshot().timestamp.elapsed_seconds
         
@@ -487,10 +508,12 @@ def main(args=None):
         while (frame_current < nbr_frame):
             frame_current = VelodyneHDL64.save()
             normals.save() #Store location for Mycar
-            optical.save()
+            
+            # M- OP and IS not supported
+            # optical.save()
             RGB_left.save()
             RGB_right.save()
-            ins_segmc.save()
+            # ins_segmc.save()
             # depth.save()
             originDepth.save()
             SemSeg.save()
@@ -502,7 +525,7 @@ def main(args=None):
                     traffic_light.set_state(carla.TrafficLightState.Green)
             # All sensors produce first data at the same time (this ts)
             gen.follow(MyCar.get_transform(), world)
-            world.tick()    # Pass to the next simulator frame
+            self.world.tick()    # Pass to the next simulator frame
             # M- debug
             print("!Running loop for frame:", frame_current)
         
@@ -530,7 +553,7 @@ def main(args=None):
         print()
             
         time.sleep(2.0)
-        
+    '''
     except Exception as e:
         print("An error occurred:", e)
         traceback.print_exc()
@@ -542,7 +565,34 @@ def main(args=None):
         client.apply_batch([carla.command.DestroyActor(x) for x in actor_list])
         client.apply_batch([carla.command.DestroyActor(x) for x in vehicles_list])
         client.apply_batch([carla.command.DestroyActor(x) for x in all_walkers_id])
-        print('done.')
+        print('done.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    '''
+        
+def main(args=None):
+    """
+    main function
+    """
+    roscomp.init('carla_waypoint_publisher', args)
+
+    waypoint_converter = None
+    try:
+        waypoint_converter = CarlaToRosWaypointConverter()
+        waypoint_converter.spin()
+    except (RuntimeError, ROSException):
+        pass
+    except KeyboardInterrupt:
+        roscomp.loginfo("User requested shut down.")
+    except Exception as e:
+        print("An error occurred:", e)
+        traceback.print_exc()
+    
+    finally:
+        roscomp.loginfo("Shutting down.")
+        if waypoint_converter:
+            waypoint_converter.destroy()
+        roscomp.shutdown()
+
+
 
 
 if __name__ == "__main__":

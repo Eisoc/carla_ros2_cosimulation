@@ -20,7 +20,7 @@ except ImportError:
 import sys
 from distutils.version import LooseVersion
 from threading import Thread, Lock, Event
-
+import time
 import carla
 
 import ros_compatibility as roscomp
@@ -250,6 +250,14 @@ class CarlaRosBridge(CompatibleNode):
         """
         execution loop for synchronous mode
         """
+        # M- 
+        """
+        first issue is that the RGB (and IMU) sensors were not spawned at the same tick, 
+        this is solved by adding sleep of two seconds time.sleep(2) at the ros bridge bridge.py 
+        at the first line _synchronous_mode_update so that carla_spawn_objects thread will 
+        finish its work and everything is spawned and created in bridge at the same tick
+        """
+        time.sleep(2)
         while not self.shutdown.is_set() and roscomp.ok():
             self.process_run_state()
 

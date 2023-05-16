@@ -55,14 +55,8 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='synchronous_mode_wait_for_vehicle_control_command',
-            default_value='False' # M- default:false
+            default_value='False'
         ),
-        ##########
-        launch.actions.DeclareLaunchArgument(
-            name='synchronous_mode',
-            default_value='True'
-        ),
-        ########
         launch.actions.DeclareLaunchArgument(
             name='fixed_delta_seconds',
             default_value='0.05'
@@ -73,11 +67,11 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='spawn_point',
-            default_value='127.4,-195.2,2,0,0,180'
+            default_value='127.4,-195.4,2,0,0,180'
         ),
         launch.actions.DeclareLaunchArgument(
             name='target_speed',
-            default_value='2.33' # in m/s
+            default_value='8.33' # in m/s
         ),
         launch.actions.DeclareLaunchArgument(
             name='avoid_risk',
@@ -98,12 +92,11 @@ def generate_launch_description():
                 'town': launch.substitutions.LaunchConfiguration('town'),
                 'timeout': launch.substitutions.LaunchConfiguration('timeout'),
                 'synchronous_mode_wait_for_vehicle_control_command': launch.substitutions.LaunchConfiguration('synchronous_mode_wait_for_vehicle_control_command'),
-                'fixed_delta_seconds': launch.substitutions.LaunchConfiguration('fixed_delta_seconds'),
-                'synchronous_mode': launch.substitutions.LaunchConfiguration('synchronous_mode')
+                'fixed_delta_seconds': launch.substitutions.LaunchConfiguration('fixed_delta_seconds')
             }.items()
         ),
         
-        
+        '''
         launch.actions.OpaqueFunction(function=launch_carla_spawn_object),
         launch.actions.OpaqueFunction(function=launch_target_speed_publisher),
         launch.actions.IncludeLaunchDescription(
@@ -141,11 +134,11 @@ def generate_launch_description():
                 'role_name': launch.substitutions.LaunchConfiguration('role_name')
             }.items()
         )
-        
+        '''
     ])
     return ld
 
 
-if __name__ == '__main__':
-    generate_launch_description()
+#if __name__ == '__main__':
+    #generate_launch_description()
     

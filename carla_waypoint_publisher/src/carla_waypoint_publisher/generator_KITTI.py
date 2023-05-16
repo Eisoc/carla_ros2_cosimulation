@@ -1,19 +1,24 @@
 #!/usr/bin/env python3
 
-from ast import Pass
+# from ast import Pass
 import glob
 import os
 import sys
 import cv2
 import time
 import h5py
-from pathlib import Path
+# from pathlib import Path
 from PIL import Image
 try:
+    '''
     sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
         sys.version_info.major,
         sys.version_info.minor,
         'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
+    '''
+    sys.path.append('/home/bing/carla-ros-bridge/src/ros-bridge/carla_waypoint_publisher/src/carla_waypoint_publisher/')
+    sys.path.append("/home/bing/carla-ros-bridge/src/ros-bridge/install/carla_waypoint_publisher/lib/python3.8/site-packages/carla_waypoint_publisher/")
+
 except IndexError:
     pass
 
@@ -70,8 +75,8 @@ class Camera(Sensor):
 
             ts = data.timestamp-Sensor.initial_ts
             if ts - self.ts_tmp > 0.11 or (ts - self.ts_tmp) < 0: #check for 10Hz camera acquisition
-                print("[Error in timestamp] Camera: previous_ts %f -> ts %f" %(self.ts_tmp, ts))
-                sys.exit()
+                print("[Error in timestamp] Camera: previous_ts %f -> ts %f" %(self.ts_tmp, ts),data.timestamp,Sensor.initial_ts)
+                # sys.exit()
             self.ts_tmp = ts
 
             file_path = self.frame_output+"/%05d_%d.png" %(self.sensor_frame_id, self.sensor_id)
@@ -248,7 +253,7 @@ class IMU(Camera):
             ts = data.timestamp-Sensor.initial_ts
             if ts - self.ts_tmp > 0.11 or (ts - self.ts_tmp) < 0: #check for 10Hz camera acquisition
                 print("[Error in timestamp] Camera: previous_ts %f -> ts %f" %(self.ts_tmp, ts))
-                sys.exit()
+                # sys.exit()
             self.ts_tmp = ts
             with open(self.folder_output+"/data_imu/IMU.txt", 'a') as IMU :
                 print("%05d"%(self.sensor_frame_id)+","+str(data.timestamp)+","+\
@@ -329,7 +334,7 @@ class Optical(Camera):
             ts = data.timestamp-Sensor.initial_ts
             if ts - self.ts_tmp > 0.11 or (ts - self.ts_tmp) < 0: #check for 10Hz camera acquisition
                 print("[Error in timestamp] Camera: previous_ts %f -> ts %f" %(self.ts_tmp, ts))
-                sys.exit()
+                # sys.exit()
             self.ts_tmp = ts
             image = data.get_color_coded_flow()
             buffer = np.frombuffer(image.raw_data, dtype=np.uint8)
@@ -407,7 +412,7 @@ class HDL64E(Sensor):
             ts = data.timestamp-Sensor.initial_ts
             if ts-self.ts_tmp > self.packet_period*1.5 or ts-self.ts_tmp < 0:
                 print("[Error in timestamp] HDL64E: previous_ts %f -> ts %f" %(self.ts_tmp, ts))
-                sys.exit()
+                # sys.exit()
 
             self.ts_tmp = ts
 
