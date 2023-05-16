@@ -134,7 +134,7 @@ class LocalPlanner(CompatibleNode):
         """
         with self.data_lock:
             if not self._waypoint_buffer and not self._waypoints_queue:
-                self.loginfo("Waiting for a route...")
+                self.loginfo("Waiting for a route.......")
                 self.emergency_stop()
                 return
 
