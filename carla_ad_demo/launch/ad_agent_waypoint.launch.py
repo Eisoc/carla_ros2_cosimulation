@@ -57,7 +57,7 @@ def generate_launch_description():
             name='synchronous_mode_wait_for_vehicle_control_command',
             default_value='False' # M- default:false
         ),
-        ##########
+        ###########
         launch.actions.DeclareLaunchArgument(
             name='synchronous_mode',
             default_value='True'
