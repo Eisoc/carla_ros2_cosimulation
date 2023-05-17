@@ -82,8 +82,20 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         # -M def global var client
         self.carla_client = None
         self.world = None
+        
         # init sensors
-        self.counter = 0
+        self.first_call = True
+        self.VelodyneHDL64 = None
+        self.RGB_left = None
+        self.RGB_right = None
+        self.ins_segmc = None
+        # depth = gen.Depth(MyCar, world, actor_list, folder_output, right_transform)
+        self.originDepth = None
+        self.normals = None
+        self.optical = None
+        self.IMU = None
+        self.SemSeg = None
+        
         
         self.connect_to_carla()
         self.map = self.world.get_map()
@@ -288,7 +300,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         host = self.get_param("host", "127.0.0.1")
         port = self.get_param("port", 2000)
-        timeout = self.get_param("timeout", 1000)
+        timeout = self.get_param("timeout", 17)
         self.loginfo("CARLA world available. Trying to connect to {host}:{port}".format(
             host=host, port=port))
 
@@ -340,6 +352,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         
         # M-
         # client = carla.Client('localhost', 2000)
+
         client = self.carla_client
         
         init_settings = carla.WorldSettings()
@@ -349,6 +362,15 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         # world = client.get_world()
         world = self.world
+        if not self.carla_client:
+            raise RuntimeError("CARLA client has not been set")
+            
+        if not self.world:
+            raise RuntimeError("Failed to get world from CARLA client")
+        
+        print("CARLA client:", self.carla_client)
+        print("CARLA world:", self.world)
+        
         # world = client.load_world("Town10HD")
         # folder_output = "/media/stuf/data/Dataset_BrandNew%s/%s/generated" %(client.get_client_version(), world.get_map().name)
         folder_output = "//home/bing/Pictures/generator/Dataset_BrandNew%s/%s/generated" %(client.get_client_version(), world.get_map().name)
@@ -418,8 +440,9 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         print('Created %s' % MyCar)
 
         # Spawn vehicles and walkers
-        vehicles_id_list = gen.spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_id_list, all_walkers_id)
+        # vehicles_id_list = gen.spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_id_list, all_walkers_id)
         print(vehicles_id_list)
+        print("spawn points finished!!!!")
         for x in vehicles_id_list:
             vehicles_list.append(world.get_actor(x))
 
@@ -446,24 +469,25 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         # Create our sensors
         # M- IS and optical flow not supported
-        gen.RGB_left.sensor_id_glob = 0
-        gen.RGB_right.sensor_id_glob = 0
-        gen.IS.sensor_id_glob = 10
-        gen.Depth.sensor_id_glob = 20
-        gen.HDL64E.sensor_id_glob = 100
-        gen.IMU.sensor_id_glob = 0
-        gen.Optical.sensor_id_glob = 0
+        if self.first_call:
+            gen.RGB_left.sensor_id_glob = 0
+            gen.RGB_right.sensor_id_glob = 0
+            gen.IS.sensor_id_glob = 10
+            gen.Depth.sensor_id_glob = 20
+            gen.HDL64E.sensor_id_glob = 100
+            gen.IMU.sensor_id_glob = 0
+            gen.Optical.sensor_id_glob = 0
 
-        VelodyneHDL64 = gen.HDL64E(MyCar, world, actor_list, folder_output, lidar_transform)
-        RGB_left = gen.RGB_left(MyCar, world, actor_list, folder_output, left_transform)
-        RGB_right = gen.RGB_right(MyCar, world, actor_list, folder_output, right_transform)
-        ins_segmc = gen.IS(MyCar, world, actor_list, folder_output, right_transform)
-        # depth = gen.Depth(MyCar, world, actor_list, folder_output, right_transform)
-        originDepth = gen.Original_Depth(MyCar, world, actor_list, folder_output, right_transform)
-        normals = gen.Normal(MyCar, world, actor_list, folder_output, right_transform)
-        optical = gen.Optical(MyCar, world, actor_list, folder_output, right_transform)
-        IMU = gen.IMU(MyCar, world, actor_list, folder_output, right_transform)
-        SemSeg = gen.SS(MyCar, world, actor_list, folder_output, right_transform)
+            self.VelodyneHDL64 = gen.HDL64E(MyCar, world, actor_list, folder_output, lidar_transform)
+            self.RGB_left = gen.RGB_left(MyCar, world, actor_list, folder_output, left_transform)
+            self.RGB_right = gen.RGB_right(MyCar, world, actor_list, folder_output, right_transform)
+            self.ins_segmc = gen.IS(MyCar, world, actor_list, folder_output, right_transform)
+            # depth = gen.Depth(MyCar, world, actor_list, folder_output, right_transform)
+            self.originDepth = gen.Original_Depth(MyCar, world, actor_list, folder_output, right_transform)
+            self.normals = gen.Normal(MyCar, world, actor_list, folder_output, right_transform)
+            self.optical = gen.Optical(MyCar, world, actor_list, folder_output, right_transform)
+            self.IMU = gen.IMU(MyCar, world, actor_list, folder_output, right_transform)
+            self.SemSeg = gen.SS(MyCar, world, actor_list, folder_output, right_transform)
     
 
 
@@ -488,11 +512,12 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         # MyCar.set_autopilot(True)
 
         # Pass to the next simulator frame to spawn sensors and to retrieve first data
+        time.sleep(2)
         self.world.tick()
         
         # VelodyneHDL64.init()
         gen.follow(MyCar.get_transform(), world)
-        self.counter += 1
+        # self.counter += 1
         print("KITTI FIRST finished! init finished!!!!!!!!!!!!!!!!!!!!!!!!!!")
     
     
@@ -506,18 +531,18 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         print("Start record : ")
         frame_current = 0
         while (frame_current < nbr_frame):
-            frame_current = VelodyneHDL64.save()
-            normals.save() #Store location for Mycar
+            frame_current = self.VelodyneHDL64.save()
+            self.normals.save() #Store location for Mycar
             
             # M- OP and IS not supported
-            optical.save()
-            RGB_left.save()
-            RGB_right.save()
-            ins_segmc.save()
+            self.optical.save()
+            self.RGB_left.save()
+            self.RGB_right.save()
+            self.ins_segmc.save()
             # depth.save()
-            originDepth.save()
-            SemSeg.save()
-            IMU.save(MyCar,vehicles_list)#Here also stored all vehicles location
+            self.originDepth.save()
+            self.SemSeg.save()
+            self.IMU.save(MyCar,vehicles_list)#Here also stored all vehicles location
             if MyCar.is_at_traffic_light():
                 traffic_light = MyCar.get_traffic_light()
                 if traffic_light.get_state() == carla.TrafficLightState.Red:
