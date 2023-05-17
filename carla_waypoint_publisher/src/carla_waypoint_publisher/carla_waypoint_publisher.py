@@ -448,20 +448,20 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         # M- IS and optical flow not supported
         gen.RGB_left.sensor_id_glob = 0
         gen.RGB_right.sensor_id_glob = 0
-        # gen.IS.sensor_id_glob = 10
+        gen.IS.sensor_id_glob = 10
         gen.Depth.sensor_id_glob = 20
         gen.HDL64E.sensor_id_glob = 100
         gen.IMU.sensor_id_glob = 0
-        # gen.Optical.sensor_id_glob = 0
+        gen.Optical.sensor_id_glob = 0
 
         VelodyneHDL64 = gen.HDL64E(MyCar, world, actor_list, folder_output, lidar_transform)
         RGB_left = gen.RGB_left(MyCar, world, actor_list, folder_output, left_transform)
         RGB_right = gen.RGB_right(MyCar, world, actor_list, folder_output, right_transform)
-        # ins_segmc = gen.IS(MyCar, world, actor_list, folder_output, right_transform)
+        ins_segmc = gen.IS(MyCar, world, actor_list, folder_output, right_transform)
         # depth = gen.Depth(MyCar, world, actor_list, folder_output, right_transform)
         originDepth = gen.Original_Depth(MyCar, world, actor_list, folder_output, right_transform)
         normals = gen.Normal(MyCar, world, actor_list, folder_output, right_transform)
-        # optical = gen.Optical(MyCar, world, actor_list, folder_output, right_transform)
+        optical = gen.Optical(MyCar, world, actor_list, folder_output, right_transform)
         IMU = gen.IMU(MyCar, world, actor_list, folder_output, right_transform)
         SemSeg = gen.SS(MyCar, world, actor_list, folder_output, right_transform)
     
@@ -510,10 +510,10 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             normals.save() #Store location for Mycar
             
             # M- OP and IS not supported
-            # optical.save()
+            optical.save()
             RGB_left.save()
             RGB_right.save()
-            # ins_segmc.save()
+            ins_segmc.save()
             # depth.save()
             originDepth.save()
             SemSeg.save()

@@ -23,7 +23,7 @@ import carla_common.transforms as trans
 from carla_ros_bridge.actor import Actor
 from carla_ros_bridge.actor_control import ActorControl
 from carla_ros_bridge.actor_list_sensor import ActorListSensor
-from carla_ros_bridge.camera import Camera, RgbCamera, DepthCamera, SemanticSegmentationCamera, DVSCamera
+from carla_ros_bridge.camera import Camera, RgbCamera, DepthCamera, InstanceSegmentationCamera, OpticalFlowCamera, SemanticSegmentationCamera, DVSCamera
 from carla_ros_bridge.collision_sensor import CollisionSensor
 from carla_ros_bridge.ego_vehicle import EgoVehicle
 from carla_ros_bridge.gnss import Gnss
@@ -372,6 +372,21 @@ class ActorFactory(object):
                 elif carla_actor.type_id.startswith("sensor.camera.depth"):
                     actor = DepthCamera(uid, name, parent, spawn_pose,
                                         self.node, carla_actor, self.sync_mode)
+                # M- new
+                elif carla_actor.type_id.startswith(
+                        "sensor.camera.instance_segmentation"):
+                    actor = InstanceSegmentationCamera(uid, name, parent,
+                                                       spawn_pose, self.node,
+                                                       carla_actor,
+                                                       self.sync_mode)
+                #
+                elif carla_actor.type_id.startswith(
+                        "sensor.camera.optical_flow"):
+                    actor = OpticalFlowCamera(uid, name, parent,
+                                                       spawn_pose, self.node,
+                                                       carla_actor,
+                                                       self.sync_mode)
+                #
                 elif carla_actor.type_id.startswith(
                         "sensor.camera.semantic_segmentation"):
                     actor = SemanticSegmentationCamera(uid, name, parent,
