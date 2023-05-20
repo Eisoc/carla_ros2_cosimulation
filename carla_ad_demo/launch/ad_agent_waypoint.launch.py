@@ -51,7 +51,7 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='timeout',
-            default_value='30'
+            default_value='20'
         ),
         launch.actions.DeclareLaunchArgument(
             name='synchronous_mode_wait_for_vehicle_control_command',
@@ -77,7 +77,7 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='target_speed',
-            default_value='2.33' # in m/s
+            default_value='5.33' # in m/s
         ),
         launch.actions.DeclareLaunchArgument(
             name='avoid_risk',

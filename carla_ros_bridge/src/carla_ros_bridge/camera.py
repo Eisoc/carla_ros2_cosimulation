@@ -435,7 +435,7 @@ class OpticalFlowCamera(Camera):
         self.listen()
 
     def get_carla_image_data_array(self, carla_image):
-        carla_image.convert(carla.ColorConverter.LogarithmicDepth)
+        # carla_image.convert(carla.ColorConverter.LogarithmicDepth)
         carla_image_data_array = numpy.ndarray(
             shape=(carla_image.height, carla_image.width, 4),
             dtype=numpy.uint8, buffer=carla_image.raw_data)

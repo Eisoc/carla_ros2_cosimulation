@@ -487,10 +487,11 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             self.normals = gen.Normal(MyCar, world, actor_list, folder_output, right_transform)
             self.optical = gen.Optical(MyCar, world, actor_list, folder_output, right_transform)
             self.IMU = gen.IMU(MyCar, world, actor_list, folder_output, right_transform)
+            print("sensors. imu and ss,last test!!!!!!!!!!!!!")
             self.SemSeg = gen.SS(MyCar, world, actor_list, folder_output, right_transform)
     
-
-
+            print("sensors established, first call finished!!!!!!!!!!!!!!!")
+            self.first_call = False
         # Export LiDAR to cam0 transformation
         # tf_lidar_cam0 = gen.transform_lidar_to_camera(lidar_transform, left_transform)
         # with open(folder_output+"/lidar_to_cam0.txt", 'w') as posfile:
@@ -513,14 +514,13 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         # Pass to the next simulator frame to spawn sensors and to retrieve first data
         time.sleep(2)
-        self.world.tick()
+        print ("sleep finished!!!!!!!!!!!")
+        # self.world.tick()
+        print("world tick finished!!!!!!!!!!")
         
         # VelodyneHDL64.init()
         gen.follow(MyCar.get_transform(), world)
         # self.counter += 1
-        print("KITTI FIRST finished! init finished!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    
-    
     
     
         print("KITTI record beginning!!!!!!!!!!! !!!!!!!!!!!!!!!!!")
@@ -530,34 +530,36 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         start_record = time.time()
         print("Start record : ")
         frame_current = 0
-        while (frame_current < nbr_frame):
-            frame_current = self.VelodyneHDL64.save()
-            self.normals.save() #Store location for Mycar
-            
-            # M- OP and IS not supported
-            self.optical.save()
-            self.RGB_left.save()
-            self.RGB_right.save()
-            self.ins_segmc.save()
-            # depth.save()
-            self.originDepth.save()
-            self.SemSeg.save()
-            self.IMU.save(MyCar,vehicles_list)#Here also stored all vehicles location
-            if MyCar.is_at_traffic_light():
-                traffic_light = MyCar.get_traffic_light()
-                if traffic_light.get_state() == carla.TrafficLightState.Red:
-                    
-                    traffic_light.set_state(carla.TrafficLightState.Green)
-            # All sensors produce first data at the same time (this ts)
-            gen.follow(MyCar.get_transform(), world)
-            self.world.tick()    # Pass to the next simulator frame
-            # M- debug
-            print("!Running loop for frame:", frame_current)
+        if not self.first_call:
+            while (frame_current < nbr_frame):
+                frame_current = self.VelodyneHDL64.save()
+                self.normals.save() #Store location for Mycar
+                
+                # M- OP and IS not supported
+                self.optical.save()
+                self.RGB_left.save()
+                self.RGB_right.save()
+                self.ins_segmc.save()
+                # depth.save()
+                self.originDepth.save()
+                self.SemSeg.save()
+                self.IMU.save(MyCar,vehicles_list)#Here also stored all vehicles location
+                if MyCar.is_at_traffic_light():
+                    traffic_light = MyCar.get_traffic_light()
+                    if traffic_light.get_state() == carla.TrafficLightState.Red:
+                        
+                        traffic_light.set_state(carla.TrafficLightState.Green)
+                # All sensors produce first data at the same time (this ts)
+                gen.follow(MyCar.get_transform(), world)
+                # self.world.tick()    # Pass to the next simulator frame
+                # M- debug
+                print("!Running loop for frame:", frame_current)
         
         #VelodyneHDL64.save_poses()
         client.stop_recorder()
         print("Stop record")
         
+        '''
         print('Destroying %d vehicles' % len(vehicles_list))
         client.apply_batch([carla.command.DestroyActor(x) for x in vehicles_list])
         vehicles_list.clear()
@@ -576,7 +578,8 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             
         print("Elapsed time : ", time.time()-start_record)
         print()
-            
+        '''
+        
         time.sleep(2.0)
     '''
     except Exception as e:
