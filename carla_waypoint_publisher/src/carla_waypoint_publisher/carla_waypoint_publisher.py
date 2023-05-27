@@ -83,6 +83,10 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         self.carla_client = None
         self.world = None
         
+        # threading
+        self.thread = threading.Thread(target=self.KITTI_gen)
+
+        
         # init sensors
         self.first_call = True
         self.VelodyneHDL64 = None
@@ -283,7 +287,11 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         self.waypoint_publisher.publish(msg)
         self.loginfo("Published {} waypoints.".format(len(msg.poses)))
-        self.KITTI_gen()
+        time.sleep(1)
+        print("goal changed, prepare to next record...................")
+        self.thread = threading.Thread(target=self.KITTI_gen)
+        print("thread reset succeessfully.............")
+        self.thread.start()
 
     def connect_to_carla(self):
 
@@ -336,7 +344,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
   
         start_record_full = time.time()
         time_stop = 2.0
-        nbr_frame = 200 #MAX = 100000
+        nbr_frame = 500 #MAX = 100000
         nbr_walkers = 0
         nbr_vehicles = 0
 
@@ -514,9 +522,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         # Pass to the next simulator frame to spawn sensors and to retrieve first data
         time.sleep(2)
-        print ("sleep finished!!!!!!!!!!!")
         # self.world.tick()
-        print("world tick finished!!!!!!!!!!")
         
         # VelodyneHDL64.init()
         gen.follow(MyCar.get_transform(), world)
@@ -531,6 +537,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         print("Start record : ")
         frame_current = 0
         if not self.first_call:
+            initial_goal = self.goal
             while (frame_current < nbr_frame):
                 frame_current = self.VelodyneHDL64.save()
                 self.normals.save() #Store location for Mycar
@@ -554,7 +561,15 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 # self.world.tick()    # Pass to the next simulator frame
                 # M- debug
                 print("!Running loop for frame:", frame_current)
-        
+                
+                if self.goal != initial_goal:
+                    print("changed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111")
+                    # self.on_goal
+                    break
+                
+                time.sleep(0.04)
+                
+                
         #VelodyneHDL64.save_poses()
         client.stop_recorder()
         print("Stop record")
