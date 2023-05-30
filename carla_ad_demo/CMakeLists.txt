@@ -3,6 +3,7 @@ project(carla_ad_demo)
 find_package(ros_environment REQUIRED)
 set(ROS_VERSION $ENV{ROS_VERSION})
 
+
 if(${ROS_VERSION} EQUAL 1)
   cmake_minimum_required(VERSION 2.8.3)
 
@@ -20,7 +21,22 @@ if(${ROS_VERSION} EQUAL 1)
   install(DIRECTORY config/
           DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config)
 
+
+
 elseif(${ROS_VERSION} EQUAL 2)
+
+#
+  install(
+    PROGRAMS
+      launch/tf2_broadcaster.py
+    DESTINATION lib/${PROJECT_NAME}
+  )
+
+
+#
+
+
+
 
   cmake_minimum_required(VERSION 3.5)
 

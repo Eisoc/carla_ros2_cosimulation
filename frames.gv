@@ -1,22 +1,21 @@
 digraph G {
-"base_link" -> "left_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10.204\nBuffer length: 4.9\nMost recent transform: 1685458172.901193\nOldest transform: 1685458168.001223\n"];
+"base_link" -> "left_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10.2\nBuffer length: 5.0\nMost recent transform: 1685466958.289145\nOldest transform: 1685466953.289139\n"];
 "map" -> "base_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
-"base_link" -> "right_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10.204\nBuffer length: 4.9\nMost recent transform: 1685458172.901193\nOldest transform: 1685458168.001223\n"];
-"ego_vehicle" -> "ego_vehicle/front"[label=" Broadcaster: default_authority\nAverage rate: 90.526\nBuffer length: 0.95\nMost recent transform: 5.58936\nOldest transform: 4.63936\n"];
-"map" -> "ego_vehicle"[label=" Broadcaster: default_authority\nAverage rate: 21.111\nBuffer length: 0.9\nMost recent transform: 5.58936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/rgb_front"[label=" Broadcaster: default_authority\nAverage rate: 21.053\nBuffer length: 0.95\nMost recent transform: 5.63936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/rgb_view"[label=" Broadcaster: default_authority\nAverage rate: 21.053\nBuffer length: 0.95\nMost recent transform: 5.63936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/lidar"[label=" Broadcaster: default_authority\nAverage rate: 21.053\nBuffer length: 0.95\nMost recent transform: 5.63936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/semantic_lidar"[label=" Broadcaster: default_authority\nAverage rate: 21.053\nBuffer length: 0.95\nMost recent transform: 5.63936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/radar_front"[label=" Broadcaster: default_authority\nAverage rate: 21.111\nBuffer length: 0.9\nMost recent transform: 5.58936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/semantic_segmentation_front"[label=" Broadcaster: default_authority\nAverage rate: 21.111\nBuffer length: 0.9\nMost recent transform: 5.58936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/depth_front"[label=" Broadcaster: default_authority\nAverage rate: 21.111\nBuffer length: 0.9\nMost recent transform: 5.58936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/dvs_front"[label=" Broadcaster: default_authority\nAverage rate: 21.111\nBuffer length: 0.9\nMost recent transform: 5.58936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/gnss"[label=" Broadcaster: default_authority\nAverage rate: 21.111\nBuffer length: 0.9\nMost recent transform: 5.58936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/imu"[label=" Broadcaster: default_authority\nAverage rate: 21.111\nBuffer length: 0.9\nMost recent transform: 5.58936\nOldest transform: 4.68936\n"];
-"ego_vehicle" -> "ego_vehicle/default"[label=" Broadcaster: default_authority\nAverage rate: 11.111\nBuffer length: 0.9\nMost recent transform: 5.53936\nOldest transform: 4.63936\n"];
+"base_link" -> "right_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10.2\nBuffer length: 5.0\nMost recent transform: 1685466958.289145\nOldest transform: 1685466953.289139\n"];
+"ego_vehicle" -> "ego_vehicle/lidar"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"map" -> "ego_vehicle"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"ego_vehicle" -> "ego_vehicle/semantic_lidar"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"ego_vehicle" -> "ego_vehicle/radar_front"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"ego_vehicle" -> "ego_vehicle/semantic_segmentation_front"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"ego_vehicle" -> "ego_vehicle/depth_front"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"ego_vehicle" -> "ego_vehicle/dvs_front"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"ego_vehicle" -> "ego_vehicle/gnss"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"ego_vehicle" -> "ego_vehicle/imu"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"ego_vehicle" -> "ego_vehicle/front"[label=" Broadcaster: default_authority\nAverage rate: 20000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"ego_vehicle" -> "ego_vehicle/rgb_front"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
+"ego_vehicle" -> "ego_vehicle/rgb_view"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 3.017668\nOldest transform: 3.017668\n"];
 edge [style=invis];
  subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
-"Recorded at time: 1685458172.9477355"[ shape=plaintext ] ;
+"Recorded at time: 1685466958.3074656"[ shape=plaintext ] ;
 }->"map";
 }

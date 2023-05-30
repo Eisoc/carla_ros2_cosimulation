@@ -3,7 +3,9 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /TF1/Frames1/base_link1
+        - /TF1/Tree1
       Splitter Ratio: 0.5
     Tree Height: 457
   - Class: rviz_common/Selection
@@ -242,8 +244,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 5.277982234954834
-        Min Value: -2.384185791015625e-07
+        Max Value: 6.676839351654053
+        Min Value: -4.76837158203125e-07
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -275,8 +277,8 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
-      Description File: ""
-      Description Source: Topic
+      Description File: /home/bing/carla-ros-bridge/src/ros-bridge/carla_ad_demo/launch/tesla.urdf
+      Description Source: File
       Description Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -289,7 +291,22 @@ Visualization Manager:
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
-        Link Tree Style: ""
+        Link Tree Style: Links in Alphabetic Order
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_wheel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Name: RobotModel
       TF Prefix: ""
       Update Interval: 0
@@ -416,7 +433,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/ThirdPersonFollower
-      Distance: 110.88624572753906
+      Distance: 222.36041259765625
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -431,10 +448,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.8103985786437988
+      Pitch: 0.7053989171981812
       Target Frame: ego_vehicle
       Value: ThirdPersonFollower (rviz_default_plugins)
-      Yaw: 2.200392484664917
+      Yaw: 2.57539701461792
     Saved: ~
 Window Geometry:
   CarlaControl:
