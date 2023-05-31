@@ -536,6 +536,17 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         start_record = time.time()
         print("Start record : ")
         frame_current = 0
+        traffic_lights = world.get_actors().filter('traffic.traffic_light')
+        
+        def set_traffic_light_to_green(traffic_light):
+            if traffic_light.get_state() != carla.TrafficLightState.Green:
+                traffic_light.set_state(carla.TrafficLightState.Green)
+                traffic_light.set_green_time(0)  # 设置绿灯持续时间（以秒为单位）
+
+        for traffic_light in traffic_lights:
+            set_traffic_light_to_green(traffic_light)
+            print("Traffic light state set successfully!!!!!!!!!!!!")
+            
         if not self.first_call:
             initial_goal = self.goal
             while (frame_current < nbr_frame):
@@ -554,8 +565,8 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 if MyCar.is_at_traffic_light():
                     traffic_light = MyCar.get_traffic_light()
                     if traffic_light.get_state() == carla.TrafficLightState.Red:
-                        
                         traffic_light.set_state(carla.TrafficLightState.Green)
+
                 # All sensors produce first data at the same time (this ts)
                 gen.follow(MyCar.get_transform(), world)
                 # self.world.tick()    # Pass to the next simulator frame
@@ -563,7 +574,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 print("!Running loop for frame:", frame_current)
                 
                 if self.goal != initial_goal:
-                    print("changed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111")
+                    print("Goal changed! Exit the loop and re-route")
                     # self.on_goal
                     break
                 

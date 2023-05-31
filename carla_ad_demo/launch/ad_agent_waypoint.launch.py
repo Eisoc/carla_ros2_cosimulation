@@ -65,7 +65,7 @@ def generate_launch_description():
         ########
         launch.actions.DeclareLaunchArgument(
             name='fixed_delta_seconds',
-            default_value='0.05'
+            default_value='0.02'
         ),
         launch.actions.DeclareLaunchArgument(
             name='role_name',
@@ -77,7 +77,7 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='target_speed',
-            default_value='5.33' # in m/s
+            default_value='10.33' # in m/s
         ),
         launch.actions.DeclareLaunchArgument(
             name='avoid_risk',

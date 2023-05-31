@@ -34,7 +34,7 @@ elif ROS_VERSION == 2:
         tests_require=['pytest'],
         entry_points={
             'console_scripts': ['bridge = carla_ros_bridge.bridge:main',
-            'tf2_broadcaster = mypackage.tf2_broadcaster:main'
+            'tf2_broadcaster = carla_ros_bridge.tf2_broadcaster:main'
             ],
         },
         package_dir={'': 'src'},

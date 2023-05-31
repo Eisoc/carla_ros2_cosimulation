@@ -5,51 +5,13 @@
         <visual>
             <origin xyz=" 0 0 0" rpy="0 0 0" />
  		<geometry>
-            		<mesh filename="file:////home/bing/carla-ros-bridge/src/ros-bridge/carla_ad_demo/launch/tesla_dae/tesla3.dae"/>
+            		<mesh filename="file:////home/bing/carla-ros-bridge/src/ros-bridge/carla_ad_demo/launch/tesla_dae/tesla3_0.9.dae"/>
         	</geometry>
-            <material name="yellow">
-                <color rgba="1 0.4 0 1"/>
-            </material>
+
         </visual>
     </link>
 
-    <joint name="left_wheel_joint" type="continuous">
-        <origin xyz="0 0.19 -0.05" rpy="0 0 0"/>
-        <parent link="base_link"/>
-        <child link="left_wheel_link"/>
-        <axis xyz="0 1 0"/>
-    </joint>
 
-    <link name="left_wheel_link">
-        <visual>
-            <origin xyz="0 0 0" rpy="1.5707 0 0" />
-            <geometry>
-                <cylinder radius="0.06" length = "0.025"/>
-            </geometry>
-            <material name="white">
-                <color rgba="1 1 1 0.9"/>
-            </material>
-        </visual>
-    </link>
-
-    <joint name="right_wheel_joint" type="continuous">
-        <origin xyz="0 -0.19 -0.05" rpy="0 0 0"/>
-        <parent link="base_link"/>
-        <child link="right_wheel_link"/>
-        <axis xyz="0 1 0"/>
-    </joint>
-
-    <link name="right_wheel_link">
-        <visual>
-            <origin xyz="0 0 0" rpy="1.5707 0 0" />
-            <geometry>
-                <cylinder radius="0.06" length = "0.025"/>
-            </geometry>
-            <material name="white">
-                <color rgba="1 1 1 0.9"/>
-            </material>
-        </visual>
-    </link>
 
 
 </robot>

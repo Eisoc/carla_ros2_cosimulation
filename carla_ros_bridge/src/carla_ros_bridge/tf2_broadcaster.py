@@ -1,58 +1,35 @@
 #!/usr/bin/env python
 
 
-import rclpy
-from rclpy.node import Node
-from tf2_ros import TransformBroadcaster, TransformStamped
-import geometry_msgs.msg
+import rclpy                                                                 # ROS2 Python接口库
+from rclpy.node import Node                                                  # ROS2 节点类
+from geometry_msgs.msg import TransformStamped                               # 坐标变换消息
+import tf_transformations                                                    # TF坐标变换库
+from tf2_ros.static_transform_broadcaster import StaticTransformBroadcaster  # TF静态坐标系广播器类
 
-class TF2Broadcaster(Node):
-    def __init__(self):
-        super().__init__('tf2_broadcaster')
+class StaticTFBroadcaster(Node):
+    def __init__(self, name):
+        super().__init__(name)                                                  # ROS2节点父类初始化
+        self.tf_broadcaster = StaticTransformBroadcaster(self)                  # 创建一个TF广播器对象
 
-        self.br = TransformBroadcaster(self)
-        self.timer = self.create_timer(0.1, self.broadcast_tf)
+        static_transformStamped = TransformStamped()                            # 创建一个坐标变换的消息对象
+        static_transformStamped.header.stamp = self.get_clock().now().to_msg()  # 设置坐标变换消息的时间戳
+        static_transformStamped.header.frame_id = 'ego_vehicle'                       # 设置一个坐标变换的源坐标系
+        static_transformStamped.child_frame_id  = 'base_link'                       # 设置一个坐标变换的目标坐标系
+        static_transformStamped.transform.translation.x = 0.0                # 设置坐标变换中的X、Y、Z向的平移
+        static_transformStamped.transform.translation.y = 0.0                  
+        static_transformStamped.transform.translation.z = 0.7
+        quat = tf_transformations.quaternion_from_euler(0.0, 0.0, -1.57)          # 将欧拉角转换为四元数（roll, pitch, yaw）
+        static_transformStamped.transform.rotation.x = quat[0]                  # 设置坐标变换中的X、Y、Z向的旋转（四元数）
+        static_transformStamped.transform.rotation.y = quat[1]
+        static_transformStamped.transform.rotation.z = quat[2]
+        static_transformStamped.transform.rotation.w = quat[3]
 
-        # 初始化变量用于保存 ego_vehicle 的位置信息
-        self.vehicle_x = 0.0
-        self.vehicle_y = 0.0
-        self.vehicle_z = 0.0
-
-    def update_vehicle_position(self):
-        # 根据实际情况更新 ego_vehicle 的位置信息
-        # 示例中假设 ego_vehicle 在 x 方向上以固定速度移动
-        self.vehicle_x += 0.1  # 假设每次定时器触发时 ego_vehicle 在 x 方向上移动 0.1
-
-    def broadcast_tf(self):
-        t = TransformStamped()
-
-        t.header.stamp = self.get_clock().now().to_msg()
-        t.header.frame_id = 'ego_vehicle'
-        t.child_frame_id = 'base_link'
-
-        # 更新 ego_vehicle 的位置信息
-        self.update_vehicle_position()
-
-        t.transform.translation.x = self.vehicle_x
-        t.transform.translation.y = self.vehicle_y
-        t.transform.translation.z = self.vehicle_z
-
-        t.transform.rotation.x = 0.0
-        t.transform.rotation.y = 0.0
-        t.transform.rotation.z = 0.0
-        t.transform.rotation.w = 1.0
-
-        self.br.sendTransform(t)
+        self.tf_broadcaster.sendTransform(static_transformStamped)              # 广播静态坐标变换，广播后两个坐标系的位置关系保持不变
 
 def main(args=None):
-    rclpy.init(args=args)
-
-    tfb = TF2Broadcaster()
-
-    rclpy.spin(tfb)
-
-    tfb.destroy_node()
+    rclpy.init(args=args)                                # ROS2 Python接口初始化
+    node = StaticTFBroadcaster("static_tf_broadcaster")  # 创建ROS2节点对象并进行初始化
+    rclpy.spin(node)                                     # 循环等待ROS2退出
+    node.destroy_node()                                  # 销毁节点对象
     rclpy.shutdown()
-
-if __name__ == '__main__':
-    main()

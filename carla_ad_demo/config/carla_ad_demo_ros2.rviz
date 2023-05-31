@@ -4,7 +4,6 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /TF1/Frames1/base_link1
         - /TF1/Tree1
       Splitter Ratio: 0.5
     Tree Height: 457
@@ -113,9 +112,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 0.9798189401626587
+      Max Intensity: 0.9798300266265869
       Min Color: 0; 0; 0
-      Min Intensity: 0.8187961578369141
+      Min Intensity: 0.818770170211792
       Name: Lidar
       Position Transformer: XYZ
       Selectable: true
@@ -132,17 +131,17 @@ Visualization Manager:
       Use rainbow: true
       Value: true
     - Class: rviz_default_plugins/MarkerArray
-      Enabled: true
+      Enabled: false
       Name: Objects
       Namespaces:
-        "": true
+        {}
       Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /carla/markers
-      Value: true
+      Value: false
     - Class: rviz_default_plugins/MarkerArray
       Enabled: true
       Name: StaticObjects
@@ -223,7 +222,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 19
+      Max Intensity: 21
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: Semantic Lidar
@@ -244,8 +243,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 6.676839351654053
-        Min Value: -4.76837158203125e-07
+        Max Value: 5.360274314880371
+        Min Value: -2.384185791015625e-07
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -313,83 +312,19 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz_default_plugins/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        base_link:
-          Value: true
-        ego_vehicle:
-          Value: true
-        ego_vehicle/default:
-          Value: true
-        ego_vehicle/depth_front:
-          Value: true
-        ego_vehicle/dvs_front:
-          Value: true
-        ego_vehicle/front:
-          Value: true
-        ego_vehicle/gnss:
-          Value: true
-        ego_vehicle/imu:
-          Value: true
-        ego_vehicle/lidar:
-          Value: true
-        ego_vehicle/radar_front:
-          Value: true
-        ego_vehicle/rgb_front:
-          Value: true
-        ego_vehicle/rgb_view:
-          Value: true
-        ego_vehicle/semantic_lidar:
-          Value: true
-        ego_vehicle/semantic_segmentation_front:
-          Value: true
-        left_wheel_link:
-          Value: true
-        map:
-          Value: true
-        right_wheel_link:
-          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
-        map:
-          base_link:
-            left_wheel_link:
-              {}
-            right_wheel_link:
-              {}
-          ego_vehicle:
-            ego_vehicle/default:
-              {}
-            ego_vehicle/depth_front:
-              {}
-            ego_vehicle/dvs_front:
-              {}
-            ego_vehicle/front:
-              {}
-            ego_vehicle/gnss:
-              {}
-            ego_vehicle/imu:
-              {}
-            ego_vehicle/lidar:
-              {}
-            ego_vehicle/radar_front:
-              {}
-            ego_vehicle/rgb_front:
-              {}
-            ego_vehicle/rgb_view:
-              {}
-            ego_vehicle/semantic_lidar:
-              {}
-            ego_vehicle/semantic_segmentation_front:
-              {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -433,7 +368,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/ThirdPersonFollower
-      Distance: 222.36041259765625
+      Distance: 130.2625274658203
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -448,10 +383,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7053989171981812
+      Pitch: 0.5753989815711975
       Target Frame: ego_vehicle
       Value: ThirdPersonFollower (rviz_default_plugins)
-      Yaw: 2.57539701461792
+      Yaw: 3.5904014110565186
     Saved: ~
 Window Geometry:
   CarlaControl:
