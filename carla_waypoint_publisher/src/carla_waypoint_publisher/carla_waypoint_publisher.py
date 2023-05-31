@@ -288,9 +288,9 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         self.waypoint_publisher.publish(msg)
         self.loginfo("Published {} waypoints.".format(len(msg.poses)))
         time.sleep(1)
-        print("goal changed, prepare to next record...................")
+        print("goal changed, prepare to next record.")
         self.thread = threading.Thread(target=self.KITTI_gen)
-        print("thread reset succeessfully.............")
+        print("thread reset succeessfully.")
         self.thread.start()
 
     def connect_to_carla(self):
@@ -365,7 +365,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         
         init_settings = carla.WorldSettings()
         # client.set_timeout(100.0)
-        print("Set town10 as our map!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print("Set our map!!")
         # print(client.get_available_maps())
 
         # world = client.get_world()
@@ -450,7 +450,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         # Spawn vehicles and walkers
         # vehicles_id_list = gen.spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_id_list, all_walkers_id)
         print(vehicles_id_list)
-        print("spawn points finished!!!!")
+        print("spawn points finished!")
         for x in vehicles_id_list:
             vehicles_list.append(world.get_actor(x))
 
@@ -495,10 +495,10 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             self.normals = gen.Normal(MyCar, world, actor_list, folder_output, right_transform)
             self.optical = gen.Optical(MyCar, world, actor_list, folder_output, right_transform)
             self.IMU = gen.IMU(MyCar, world, actor_list, folder_output, right_transform)
-            print("sensors. imu and ss,last test!!!!!!!!!!!!!")
+            print("sensors. imu and ss,last test!")
             self.SemSeg = gen.SS(MyCar, world, actor_list, folder_output, right_transform)
     
-            print("sensors established, first call finished!!!!!!!!!!!!!!!")
+            print("sensors established, first call finished")
             self.first_call = False
         # Export LiDAR to cam0 transformation
         # tf_lidar_cam0 = gen.transform_lidar_to_camera(lidar_transform, left_transform)
@@ -529,7 +529,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         # self.counter += 1
     
     
-        print("KITTI record beginning!!!!!!!!!!! !!!!!!!!!!!!!!!!!")
+        print("KITTI record beginning!")
         # All sensors produce first data at the same time (this ts)
         gen.Sensor.initial_ts = world.get_snapshot().timestamp.elapsed_seconds
         
@@ -545,7 +545,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         for traffic_light in traffic_lights:
             set_traffic_light_to_green(traffic_light)
-            print("Traffic light state set successfully!!!!!!!!!!!!")
+            print("Traffic light state set successfully!")
             
         if not self.first_call:
             initial_goal = self.goal
@@ -619,7 +619,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         client.apply_batch([carla.command.DestroyActor(x) for x in actor_list])
         client.apply_batch([carla.command.DestroyActor(x) for x in vehicles_list])
         client.apply_batch([carla.command.DestroyActor(x) for x in all_walkers_id])
-        print('done.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        print('done.!')
     '''
         
 def main(args=None):
