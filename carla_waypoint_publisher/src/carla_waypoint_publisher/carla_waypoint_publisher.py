@@ -345,8 +345,8 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         start_record_full = time.time()
         time_stop = 2.0
         nbr_frame = 500 #MAX = 100000
-        nbr_walkers = 0
-        nbr_vehicles = 0
+        nbr_walkers = 5
+        nbr_vehicles = 6
 
         actor_list = []
         vehicles_id_list = []
@@ -448,7 +448,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         print('Created %s' % MyCar)
 
         # Spawn vehicles and walkers
-        # vehicles_id_list = gen.spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_id_list, all_walkers_id)
+        vehicles_id_list = gen.spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_id_list, all_walkers_id)
         print(vehicles_id_list)
         print("spawn points finished!")
         for x in vehicles_id_list:
