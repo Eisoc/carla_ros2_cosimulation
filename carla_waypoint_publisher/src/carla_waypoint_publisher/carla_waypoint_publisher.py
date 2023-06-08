@@ -327,11 +327,13 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         self.loginfo("Connected to Carla.")
         settings = self.world.get_settings()
-        '''
+        
+        
+        
         settings.synchronous_mode = True
         settings.fixed_delta_seconds = 0.05
         settings.no_rendering_mode = False
-        '''
+        
 
         self.world.apply_settings(settings)
     # M-
@@ -346,7 +348,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         time_stop = 2.0
         nbr_frame = 500 #MAX = 100000
         nbr_walkers = 5
-        nbr_vehicles = 6
+        nbr_vehicles = 7
 
         actor_list = []
         vehicles_id_list = []
@@ -387,6 +389,17 @@ class CarlaToRosWaypointConverter(CompatibleNode):
     
         # Weather
         world.set_weather(carla.WeatherParameters.ClearNoon)
+        
+        traffic_lights = world.get_actors().filter('traffic.traffic_light')
+        
+        def set_traffic_light_to_green(traffic_light):
+            if traffic_light.get_state() != carla.TrafficLightState.Green:
+                traffic_light.set_state(carla.TrafficLightState.Green)
+                traffic_light.set_green_time(1000)  # 设置绿灯持续时间（以秒为单位）
+
+        for traffic_light in traffic_lights:
+            set_traffic_light_to_green(traffic_light)
+            print("Traffic light state set successfully!")
         # weather = carla.WeatherParameters(
         #     fog_density = 80.0,
         #     fog_distance = 1.0,
@@ -448,11 +461,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         print('Created %s' % MyCar)
 
         # Spawn vehicles and walkers
-        vehicles_id_list = gen.spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_id_list, all_walkers_id)
-        print(vehicles_id_list)
-        print("spawn points finished!")
-        for x in vehicles_id_list:
-            vehicles_list.append(world.get_actor(x))
+
 
         #Set instance id
         # world.set_instance_tagging_style("actor_id")
@@ -478,6 +487,8 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         # Create our sensors
         # M- IS and optical flow not supported
         if self.first_call:
+            
+
             gen.RGB_left.sensor_id_glob = 0
             gen.RGB_right.sensor_id_glob = 0
             gen.IS.sensor_id_glob = 10
@@ -499,6 +510,13 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             self.SemSeg = gen.SS(MyCar, world, actor_list, folder_output, right_transform)
     
             print("sensors established, first call finished")
+            vehicles_id_list = gen.spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_id_list, all_walkers_id)
+            print(vehicles_id_list)
+            print("spawn points finished!")
+            for x in vehicles_id_list:
+                vehicles_list.append(world.get_actor(x))
+                #must spawn npc after sensor established, or server will crash, out of time, maybe a bug
+                
             self.first_call = False
         # Export LiDAR to cam0 transformation
         # tf_lidar_cam0 = gen.transform_lidar_to_camera(lidar_transform, left_transform)
@@ -536,16 +554,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         start_record = time.time()
         print("Start record : ")
         frame_current = 0
-        traffic_lights = world.get_actors().filter('traffic.traffic_light')
-        
-        def set_traffic_light_to_green(traffic_light):
-            if traffic_light.get_state() != carla.TrafficLightState.Green:
-                traffic_light.set_state(carla.TrafficLightState.Green)
-                traffic_light.set_green_time(0)  # 设置绿灯持续时间（以秒为单位）
 
-        for traffic_light in traffic_lights:
-            set_traffic_light_to_green(traffic_light)
-            print("Traffic light state set successfully!")
             
         if not self.first_call:
             initial_goal = self.goal
@@ -569,9 +578,18 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
                 # All sensors produce first data at the same time (this ts)
                 gen.follow(MyCar.get_transform(), world)
-                # self.world.tick()    # Pass to the next simulator frame
+                
                 # M- debug
-                print("!Running loop for frame:", frame_current)
+                
+                if frame_current < 2:
+                    print("Initializing!, frame = ", frame_current, self.world.get_settings().synchronous_mode)
+                    
+                else:
+                    print("!Running loop for frame:", frame_current)
+                    # self.world.tick() 
+                
+                
+                # print("!Running loop for frame:", frame_current)
                 
                 if self.goal != initial_goal:
                     print("Goal changed! Exit the loop and re-route")
@@ -579,7 +597,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                     break
                 
                 time.sleep(0.04)
-                
+                # self.world.tick()    # Pass to the next simulator frame
                 
         #VelodyneHDL64.save_poses()
         client.stop_recorder()

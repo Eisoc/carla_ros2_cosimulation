@@ -131,17 +131,17 @@ Visualization Manager:
       Use rainbow: true
       Value: false
     - Class: rviz_default_plugins/MarkerArray
-      Enabled: false
+      Enabled: true
       Name: Objects
       Namespaces:
-        {}
+        "": true
       Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /carla/markers
-      Value: false
+      Value: true
     - Class: rviz_default_plugins/MarkerArray
       Enabled: true
       Name: StaticObjects
@@ -243,8 +243,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 2.1968331336975098
-        Min Value: -2.384185791015625e-07
+        Max Value: 6.1319990158081055
+        Min Value: 0
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -358,7 +358,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/ThirdPersonFollower
-      Distance: 58.26557922363281
+      Distance: 110.17485046386719
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -373,10 +373,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6503989100456238
+      Pitch: 0.8153988122940063
       Target Frame: ego_vehicle
       Value: ThirdPersonFollower (rviz_default_plugins)
-      Yaw: 2.4953975677490234
+      Yaw: 2.8053970336914062
     Saved: ~
 Window Geometry:
   CarlaControl:

@@ -98,8 +98,10 @@ class RGB_left(Camera):
     def set_attributes(self, blueprint_library):
         camera_bp = blueprint_library.find('sensor.camera.rgb')
 
-        camera_bp.set_attribute('image_size_x', '1392')
-        camera_bp.set_attribute('image_size_y', '1024')
+        #camera_bp.set_attribute('image_size_x', '1392')
+        #camera_bp.set_attribute('image_size_y', '1024')
+        camera_bp.set_attribute('image_size_x', '696')
+        camera_bp.set_attribute('image_size_y', '512')
         camera_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
         camera_bp.set_attribute('enable_postprocess_effects', 'True')
         camera_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
@@ -127,8 +129,10 @@ class RGB_right(Camera):
     def set_attributes(self, blueprint_library):
         camera_bp = blueprint_library.find('sensor.camera.rgb')
 
-        camera_bp.set_attribute('image_size_x', '1392')
-        camera_bp.set_attribute('image_size_y', '1024')
+        #camera_bp.set_attribute('image_size_x', '1392')
+        #camera_bp.set_attribute('image_size_y', '1024')
+        camera_bp.set_attribute('image_size_x', '696')
+        camera_bp.set_attribute('image_size_y', '512')
         camera_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
         camera_bp.set_attribute('enable_postprocess_effects', 'True')
         camera_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
@@ -154,8 +158,10 @@ class IS(Camera):
     def set_attributes(self, blueprint_library):
         camera_is_bp = blueprint_library.find('sensor.camera.instance_segmentation')
 
-        camera_is_bp.set_attribute('image_size_x', '1392')
-        camera_is_bp.set_attribute('image_size_y', '1024')
+        #camera_is_bp.set_attribute('image_size_x', '1392')
+        #camera_is_bp.set_attribute('image_size_y', '1024')
+        camera_is_bp.set_attribute('image_size_x', '696')
+        camera_is_bp.set_attribute('image_size_y', '512')
         camera_is_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
         camera_is_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
         return camera_is_bp
@@ -172,8 +178,11 @@ class Depth(Camera):
     def set_attributes(self, blueprint_library):
         camera_ss_bp = blueprint_library.find('sensor.camera.depth')
 
-        camera_ss_bp.set_attribute('image_size_x', '1392')
-        camera_ss_bp.set_attribute('image_size_y', '1024')
+        #camera_ss_bp.set_attribute('image_size_x', '1392')
+        #camera_ss_bp.set_attribute('image_size_y', '1024')
+        
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
         camera_ss_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
         camera_ss_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
         return camera_ss_bp
@@ -190,8 +199,11 @@ class Original_Depth(Camera):
     def set_attributes(self, blueprint_library):
         camera_ss_bp = blueprint_library.find('sensor.camera.depth')
 
-        camera_ss_bp.set_attribute('image_size_x', '1392')
-        camera_ss_bp.set_attribute('image_size_y', '1024')
+        #camera_ss_bp.set_attribute('image_size_x', '1392')
+        #camera_ss_bp.set_attribute('image_size_y', '1024')
+        
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
         camera_ss_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
         camera_ss_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
         return camera_ss_bp
@@ -209,8 +221,11 @@ class Normal(Camera):
         camera_ss_bp = blueprint_library.find('sensor.camera.depth')
 
 
-        camera_ss_bp.set_attribute('image_size_x', '1392')
-        camera_ss_bp.set_attribute('image_size_y', '1024')
+        #camera_ss_bp.set_attribute('image_size_x', '1392')
+        #camera_ss_bp.set_attribute('image_size_y', '1024')
+        
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
         camera_ss_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
         camera_ss_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
         return camera_ss_bp
@@ -228,8 +243,11 @@ class SS(Camera):
     def set_attributes(self, blueprint_library):
         camera_ss_bp = blueprint_library.find('sensor.camera.semantic_segmentation')
 
-        camera_ss_bp.set_attribute('image_size_x', '1392')
-        camera_ss_bp.set_attribute('image_size_y', '1024')
+        #camera_ss_bp.set_attribute('image_size_x', '1392')
+        #camera_ss_bp.set_attribute('image_size_y', '1024')
+        
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
         camera_ss_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
         camera_ss_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
         return camera_ss_bp
@@ -323,8 +341,11 @@ class Optical(Camera):
     def set_attributes(self, blueprint_library):
         #add a optical flow camera
         camera_op_bp = blueprint_library.find('sensor.camera.optical_flow')
-        camera_op_bp.set_attribute('image_size_x', '1392')
-        camera_op_bp.set_attribute('image_size_y', '1024')
+        #camera_op_bp.set_attribute('image_size_x', '1392')
+        #camera_op_bp.set_attribute('image_size_y', '1024')
+        
+        camera_op_bp.set_attribute('image_size_x', '696')
+        camera_op_bp.set_attribute('image_size_y', '512')
         camera_op_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
         return camera_op_bp
     
@@ -533,6 +554,9 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
         synchronous_master = True
 
         blueprints = world.get_blueprint_library().filter('vehicle.*')
+        #blueprints = world.get_blueprint_library().filter('vehicle.carlamotors.firetruck')
+        # blueprints += world.get_blueprint_library().filter('vehicle.tesla.cybertruck')
+        
         blueprintsWalkers = world.get_blueprint_library().filter('walker.pedestrian.*')
 
         safe = True
@@ -594,6 +618,15 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
                         logging.error(response.error)
                 else:
                         vehicles_list.append(response.actor_id)
+                        '''
+                        vehicle = world.get_actor(response.actor_id)
+                        if vehicle.is_autopilot_enabled:
+                            print(f"Vehicle {vehicle.id} is connected to traffic_manager.1111111111111111111111111111111111111")
+                        else:
+                            print(f"Vehicle {vehicle.id} is not connected to traffic_manager.2222222222222222222222222222222222222222222222222")
+                        '''
+                  
+        # world.tick()  # Update world state here
         return vehicles_list
         
 
