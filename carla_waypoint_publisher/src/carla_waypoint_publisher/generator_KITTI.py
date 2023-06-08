@@ -570,6 +570,19 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
         blueprints = sorted(blueprints, key=lambda bp: bp.id)
 
         spawn_points = world.get_map().get_spawn_points()
+        
+        center = carla.Location(x=127, y= 195, z=0)
+        radius = 70
+        # 过滤出在圆内的生成点
+        spawn_points = [sp for sp in spawn_points if sp.location.distance(center) < radius]
+        
+        """
+        spawn_point = carla.Transform(carla.Location(x=120.4, y=195.2, z=2))
+        # 在指定的坐标上生成车辆
+        vehicle_bp = random.choice(blueprints)
+        vehicle = world.spawn_actor(vehicle_bp, spawn_point)
+        """
+
         number_of_spawn_points = len(spawn_points)
         print("Number of spawn points : ", number_of_spawn_points)
 
