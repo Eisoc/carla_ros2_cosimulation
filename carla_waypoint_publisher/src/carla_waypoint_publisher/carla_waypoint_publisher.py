@@ -331,7 +331,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         
         
         settings.synchronous_mode = True
-        settings.fixed_delta_seconds = 0.05
+        settings.fixed_delta_seconds = 0.02
         settings.no_rendering_mode = False
         
 
@@ -559,7 +559,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         if not self.first_call:
             initial_goal = self.goal
             while (frame_current < nbr_frame):
-                inspector = frame_current
+                frame_inspector = frame_current # get the value of last loop
                 
                 frame_current = self.VelodyneHDL64.save()
                 self.normals.save() #Store location for Mycar
@@ -582,7 +582,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 gen.follow(MyCar.get_transform(), world)
                 
                 # M- debug
-                """
+                
                 if frame_current < 2:
                     print("Initializing!, frame = ", frame_current, self.world.get_settings().synchronous_mode)
                     # return None # to debug
@@ -590,7 +590,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 else:
                     print("!Running loop for frame:", frame_current)
                     # self.world.tick() 
-                """
+                
                 
                 # print("!Running loop for frame:", frame_current)
                 
@@ -599,12 +599,12 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                     # self.on_goal
                     break
                 
-                if frame_current > inspector:
+                if frame_current > frame_inspector:  # next frame
                     print("gooooooooooooooooooooo")
                     self.world.tick()
                 
                 
-                time.sleep(0.04)
+                time.sleep(0.1)
                 # self.world.tick()    # Pass to the next simulator frame
                 
         #VelodyneHDL64.save_poses()
