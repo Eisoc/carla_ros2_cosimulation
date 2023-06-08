@@ -574,7 +574,7 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
         
         center = carla.Location(x=127, y= 195, z=0)
         # care: my sapwn point of ego is actually 127.4,-195.2,2, but in carla y is = -y 
-        radius = 150
+        radius = 200
         # 过滤出在圆内的生成点
         spawn_points = [sp for sp in spawn_points if sp.location.distance(center) < radius]
         
@@ -648,19 +648,18 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
         for i in range(nbr_vehicles):
             # 选择一个生成点
             spawn_point = random.choice(spawn_points)
-            spawn_points.remove(spawn_point)
-            # 选择一个车辆蓝图
+            spawn_points.remove(spawn_point) #remove after using
             vehicle_bp = random.choice(blueprints)
-            # 在选定的生成点生成车辆
             vehicle = world.spawn_actor(vehicle_bp, spawn_point)
-            # 为车辆设置自动驾驶
-            vehicle.set_autopilot(True, traffic_manager.get_port())
-            speed_kmh = 40  # 设置为40公里/小时，你可以根据需要调整这个值
-            traffic_manager.set_speed(vehicle, speed_kmh / 3.6)  # 转换为米/秒
-            # 可以选择将生成的车辆添加到列表中以便稍后引用
+            vehicle.set_autopilot(True, traffic_manager.get_port())  #autopilot
+            speed_kmh = 40  
+            #traffic_manager.set_desired_speed(vehicle, speed_kmh / 3.6)  # m/s
             vehicles_list.append(vehicle)
-            print(i,"npc established")
+            print(i,"npc established!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             
+        traffic_manager.set_hybrid_physics_mode(enabled=True)
+        traffic_manager.set_hybrid_physics_radius(r=100.0)
+        traffic_manager.global_percentage_speed_difference(-20)
 
         traffic_manager.set_global_distance_to_leading_vehicle(3.0)   
 
