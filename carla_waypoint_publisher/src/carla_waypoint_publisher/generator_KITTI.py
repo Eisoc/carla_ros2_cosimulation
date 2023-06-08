@@ -574,17 +574,17 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
         
         center = carla.Location(x=127, y= 195, z=0)
         # care: my sapwn point of ego is actually 127.4,-195.2,2, but in carla y is = -y 
-        radius = 300
+        radius = 150
         # 过滤出在圆内的生成点
         spawn_points = [sp for sp in spawn_points if sp.location.distance(center) < radius]
         
-        
+        """
         spawn_point = carla.Transform(carla.Location(x=120.4, y=199.2, z=0.5))
         # 在指定的坐标上生成车辆
         vehicle_bp = random.choice(blueprints)
         vehicle = world.spawn_actor(vehicle_bp, spawn_point)
         vehicle.set_autopilot(True, traffic_manager.get_port())
-
+        """
 
         number_of_spawn_points = len(spawn_points)
         print("Number of spawn points : ", number_of_spawn_points)
@@ -623,12 +623,14 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
                 car_lights_on = False
                 if car_lights_on:
                         light_state = vls.Position | vls.LowBeam | vls.LowBeam
-
+                """
                 # spawn the cars and set their autopilot and light state all together
                 batch.append(SpawnActor(blueprint, transform)
                         .then(SetAutopilot(FutureActor, True, traffic_manager.get_port()))
                         .then(SetVehicleLightState(FutureActor, light_state)))
+                """
 
+        """
         for response in client.apply_batch_sync(batch, synchronous_master):
                 if response.error:
                         logging.error(response.error)
@@ -641,12 +643,27 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
                         else:
                             print(f"Vehicle {vehicle.id} is not connected to traffic_manager.")
                         '''
+        """
         
-        traffic_manager.set_global_distance_to_leading_vehicle(1.0)   
-        if vehicle.is_autopilot_enabled:
-            print(f"Vehicle {vehicle.id} is connected to traffic_manager.111111111111111111111111111111111111")
-        else:
-            print(f"Vehicle {vehicle.id} is not connected to traffic_manager.22222222222222222222222222222222222222")  
+        for i in range(nbr_vehicles):
+            # 选择一个生成点
+            spawn_point = random.choice(spawn_points)
+            spawn_points.remove(spawn_point)
+            # 选择一个车辆蓝图
+            vehicle_bp = random.choice(blueprints)
+            # 在选定的生成点生成车辆
+            vehicle = world.spawn_actor(vehicle_bp, spawn_point)
+            # 为车辆设置自动驾驶
+            vehicle.set_autopilot(True, traffic_manager.get_port())
+            speed_kmh = 40  # 设置为40公里/小时，你可以根据需要调整这个值
+            traffic_manager.set_speed(vehicle, speed_kmh / 3.6)  # 转换为米/秒
+            # 可以选择将生成的车辆添加到列表中以便稍后引用
+            vehicles_list.append(vehicle)
+            print(i,"npc established")
+            
+
+        traffic_manager.set_global_distance_to_leading_vehicle(3.0)   
+
         # world.tick()  # Update world state here
         return vehicles_list
         

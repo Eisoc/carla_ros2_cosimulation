@@ -348,7 +348,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         time_stop = 2.0
         nbr_frame = 1000 #MAX = 100000
         nbr_walkers = 5
-        nbr_vehicles = 7
+        nbr_vehicles = 10
 
         actor_list = []
         vehicles_id_list = []
