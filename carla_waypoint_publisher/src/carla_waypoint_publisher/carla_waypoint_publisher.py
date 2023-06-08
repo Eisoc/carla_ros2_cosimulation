@@ -346,7 +346,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
   
         start_record_full = time.time()
         time_stop = 2.0
-        nbr_frame = 500 #MAX = 100000
+        nbr_frame = 1000 #MAX = 100000
         nbr_walkers = 5
         nbr_vehicles = 7
 
@@ -559,6 +559,8 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         if not self.first_call:
             initial_goal = self.goal
             while (frame_current < nbr_frame):
+                inspector = frame_current
+                
                 frame_current = self.VelodyneHDL64.save()
                 self.normals.save() #Store location for Mycar
                 
@@ -580,14 +582,15 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 gen.follow(MyCar.get_transform(), world)
                 
                 # M- debug
-                
+                """
                 if frame_current < 2:
                     print("Initializing!, frame = ", frame_current, self.world.get_settings().synchronous_mode)
+                    # return None # to debug
                     
                 else:
                     print("!Running loop for frame:", frame_current)
                     # self.world.tick() 
-                
+                """
                 
                 # print("!Running loop for frame:", frame_current)
                 
@@ -595,6 +598,11 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                     print("Goal changed! Exit the loop and re-route")
                     # self.on_goal
                     break
+                
+                if frame_current > inspector:
+                    print("gooooooooooooooooooooo")
+                    self.world.tick()
+                
                 
                 time.sleep(0.04)
                 # self.world.tick()    # Pass to the next simulator frame

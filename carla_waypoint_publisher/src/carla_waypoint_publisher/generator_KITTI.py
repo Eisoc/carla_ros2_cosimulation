@@ -542,10 +542,11 @@ def transform_lidar_to_camera(lidar_tranform, camera_transform):
 
             
 def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
+        client.set_timeout(2.0)
         world = client.get_world()
 
-        traffic_manager = client.get_trafficmanager()
-        traffic_manager.set_global_distance_to_leading_vehicle(1.0)
+        traffic_manager = client.get_trafficmanager(5000)
+
         
         #traffic_manager.set_hybrid_physics_mode(True)
         #traffic_manager.set_random_device_seed(args.seed)
@@ -573,16 +574,17 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
         
         center = carla.Location(x=127, y= 195, z=0)
         # care: my sapwn point of ego is actually 127.4,-195.2,2, but in carla y is = -y 
-        radius = 70
+        radius = 300
         # 过滤出在圆内的生成点
         spawn_points = [sp for sp in spawn_points if sp.location.distance(center) < radius]
         
         
-        spawn_point = carla.Transform(carla.Location(x=120.4, y=195.2, z=2))
+        spawn_point = carla.Transform(carla.Location(x=120.4, y=199.2, z=0.5))
         # 在指定的坐标上生成车辆
         vehicle_bp = random.choice(blueprints)
         vehicle = world.spawn_actor(vehicle_bp, spawn_point)
-        vehicle.set_autopilot()
+        vehicle.set_autopilot(True, traffic_manager.get_port())
+
 
         number_of_spawn_points = len(spawn_points)
         print("Number of spawn points : ", number_of_spawn_points)
@@ -635,11 +637,16 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
                         '''
                         vehicle = world.get_actor(response.actor_id)
                         if vehicle.is_autopilot_enabled:
-                            print(f"Vehicle {vehicle.id} is connected to traffic_manager.1111111111111111111111111111111111111")
+                            print(f"Vehicle {vehicle.id} is connected to traffic_manager.")
                         else:
-                            print(f"Vehicle {vehicle.id} is not connected to traffic_manager.2222222222222222222222222222222222222222222222222")
+                            print(f"Vehicle {vehicle.id} is not connected to traffic_manager.")
                         '''
-                  
+        
+        traffic_manager.set_global_distance_to_leading_vehicle(1.0)   
+        if vehicle.is_autopilot_enabled:
+            print(f"Vehicle {vehicle.id} is connected to traffic_manager.111111111111111111111111111111111111")
+        else:
+            print(f"Vehicle {vehicle.id} is not connected to traffic_manager.22222222222222222222222222222222222222")  
         # world.tick()  # Update world state here
         return vehicles_list
         
