@@ -486,9 +486,9 @@ class CarlaToRosWaypointConverter(CompatibleNode):
 
         # Create our sensors
         # M- IS and optical flow not supported
-        if self.first_call:
+        if self.first_call == True:
             
-
+            self.first_call = False
             gen.RGB_left.sensor_id_glob = 0
             gen.RGB_right.sensor_id_glob = 0
             gen.IS.sensor_id_glob = 10
