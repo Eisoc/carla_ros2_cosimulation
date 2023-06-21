@@ -99,7 +99,8 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         self.optical = None
         self.IMU = None
         self.SemSeg = None
-        
+        # record frame each time the goal changed
+        self.frame_recorder = 0
         
         self.connect_to_carla()
         self.map = self.world.get_map()
@@ -347,8 +348,8 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         start_record_full = time.time()
         time_stop = 2.0
         nbr_frame = 1000 #MAX = 100000
-        nbr_walkers = 0
-        nbr_vehicles = 30
+        nbr_walkers = 20
+        nbr_vehicles = 5
 
         actor_list = []
         vehicles_id_list = []
@@ -514,7 +515,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             print(vehicles_id_list)
             print("spawn points finished!")
             for x in vehicles_id_list:
-                vehicles_list.append(world.get_actor(x))
+                vehicles_list.append(x)
                 #must spawn npc after sensor established, or server will crash, out of time, maybe a bug
                 
             self.first_call = False
@@ -539,7 +540,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         # MyCar.set_autopilot(True)
 
         # Pass to the next simulator frame to spawn sensors and to retrieve first data
-        time.sleep(2)
+        # time.sleep(2)
         # self.world.tick()
         
         # VelodyneHDL64.init()
@@ -553,13 +554,13 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         
         start_record = time.time()
         print("Start record : ")
-        frame_current = 0
+        frame_current = self.frame_recorder
 
             
         if not self.first_call:
             initial_goal = self.goal
             while (frame_current < nbr_frame):
-                frame_inspector = frame_current # get the value of last loop
+                self.frame_recorder = frame_current # get the value of last loop
                 
                 frame_current = self.VelodyneHDL64.save()
                 self.normals.save() #Store location for Mycar
@@ -573,10 +574,12 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 self.originDepth.save()
                 self.SemSeg.save()
                 self.IMU.save(MyCar,vehicles_list)#Here also stored all vehicles location
+                """
                 if MyCar.is_at_traffic_light():
                     traffic_light = MyCar.get_traffic_light()
                     if traffic_light.get_state() == carla.TrafficLightState.Red:
                         traffic_light.set_state(carla.TrafficLightState.Green)
+                """
 
                 # All sensors produce first data at the same time (this ts)
                 gen.follow(MyCar.get_transform(), world)
@@ -599,8 +602,8 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                     # self.on_goal
                     break
                 
-                if frame_current > frame_inspector:  # next frame
-                    print("gooooooooooooooooooooo")
+                if frame_current > self.frame_recorder:  # next frame
+                    print("go! next frame! current frame generated successffully!")
                     self.world.tick()
                 
                 

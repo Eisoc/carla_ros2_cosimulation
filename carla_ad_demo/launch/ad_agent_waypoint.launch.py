@@ -47,7 +47,7 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='town',
-            default_value='Town03'
+            default_value='Town10HD'
         ),
         launch.actions.DeclareLaunchArgument(
             name='timeout',
@@ -73,11 +73,12 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='spawn_point',
-            default_value='127.4,-195.2,2,0,0,180'
+            # default_value='127.4,-195.2,2,0,0,180' #Town01,03
+            default_value='56,-129,2,0,0,180' #Town10
         ),
         launch.actions.DeclareLaunchArgument(
             name='target_speed',
-            default_value='10.33' # in m/s
+            default_value='8.33' # in m/s
         ),
         launch.actions.DeclareLaunchArgument(
             name='avoid_risk',
