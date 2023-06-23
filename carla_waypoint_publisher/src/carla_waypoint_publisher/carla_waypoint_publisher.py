@@ -35,6 +35,7 @@ from carla_waypoint_types.srv import GetWaypoint, GetActorWaypoint
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Path
 
+
 # import about kitti
 import glob
 import os
@@ -101,6 +102,11 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         self.SemSeg = None
         # record frame each time the goal changed
         self.frame_recorder = 0
+        # get paras from launch
+        self.nbr_vehicles = self.get_parameter('nbr_vehicles').get_parameter_value().integer_value
+        self.nbr_walkers = self.get_parameter('nbr_walkers').get_parameter_value().integer_value
+        self.nbr_frame = self.get_parameter('nbr_frame').get_parameter_value().integer_value
+        self.radius = self.get_parameter('radius').get_parameter_value().integer_value
         
         self.connect_to_carla()
         self.map = self.world.get_map()
@@ -347,9 +353,9 @@ class CarlaToRosWaypointConverter(CompatibleNode):
   
         start_record_full = time.time()
         time_stop = 2.0
-        nbr_frame = 1000 #MAX = 100000
-        nbr_walkers = 20
-        nbr_vehicles = 5
+        nbr_frame = self.nbr_frame #MAX = 100000
+        nbr_walkers = self.nbr_walkers
+        nbr_vehicles = self.nbr_vehicles
 
         actor_list = []
         vehicles_id_list = []
@@ -511,7 +517,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             self.SemSeg = gen.SS(MyCar, world, actor_list, folder_output, right_transform)
     
             print("sensors established, first call finished")
-            vehicles_id_list = gen.spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_id_list, all_walkers_id)
+            vehicles_id_list = gen.spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_id_list, all_walkers_id, self.radius)
             print(vehicles_id_list)
             print("spawn points finished!")
             for x in vehicles_id_list:

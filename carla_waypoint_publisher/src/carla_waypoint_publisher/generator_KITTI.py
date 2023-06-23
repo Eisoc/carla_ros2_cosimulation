@@ -541,7 +541,7 @@ def transform_lidar_to_camera(lidar_tranform, camera_transform):
 
 
             
-def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
+def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id, radius):
         client.set_timeout(2.0)
         world = client.get_world()
 
@@ -576,7 +576,7 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id):
         # center = carla.Location(x=127, y= 195, z=0)
         center = carla.Location(x=56, y= 129, z=0)
         # care: my sapwn point of ego is actually 127.4,-195.2,2, but in carla y is = -y 
-        radius = 150
+        # radius = 150
         # 过滤出在圆内的生成点
         spawn_points = [sp for sp in spawn_points if sp.location.distance(center) < radius]
         

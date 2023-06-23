@@ -88,6 +88,22 @@ def generate_launch_description():
             name='sigterm_timeout',
             default_value='15'
         ),
+        launch.actions.DeclareLaunchArgument(
+            name='nbr_vehicles',
+            default_value='10'
+        ),
+        launch.actions.DeclareLaunchArgument(
+            name='nbr_walkers',
+            default_value='0'
+        ),
+        launch.actions.DeclareLaunchArgument(
+            name='nbr_frame',
+            default_value='1000'
+        ),
+        launch.actions.DeclareLaunchArgument(
+            name='radius',
+            default_value='150'
+        ),
         launch.actions.IncludeLaunchDescription(
             launch.launch_description_sources.PythonLaunchDescriptionSource(
                 os.path.join(get_package_share_directory(
@@ -128,7 +144,11 @@ def generate_launch_description():
                 'host': launch.substitutions.LaunchConfiguration('host'),
                 'port': launch.substitutions.LaunchConfiguration('port'),
                 'timeout': launch.substitutions.LaunchConfiguration('timeout'),
-                'role_name': launch.substitutions.LaunchConfiguration('role_name')
+                'role_name': launch.substitutions.LaunchConfiguration('role_name'),
+                "nbr_vehicles":launch.substitutions.LaunchConfiguration('nbr_vehicles'),
+                "nbr_walkers":launch.substitutions.LaunchConfiguration('nbr_walkers'),
+                "nbr_frame":launch.substitutions.LaunchConfiguration('nbr_frame'),
+                "radius":launch.substitutions.LaunchConfiguration('radius')
             }.items()
         ),
         

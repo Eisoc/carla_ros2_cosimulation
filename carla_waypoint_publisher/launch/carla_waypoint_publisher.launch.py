@@ -23,6 +23,18 @@ def generate_launch_description():
             name='role_name',
             default_value='ego_vehicle'
         ),
+        launch.actions.DeclareLaunchArgument(
+            name='nbr_vehicles',
+            default_value='30'
+        ),
+        launch.actions.DeclareLaunchArgument(
+            name='nbr_walkers',
+            default_value='0'
+        ),
+        launch.actions.DeclareLaunchArgument(
+            name='radius',
+            default_value='150'
+        ),
         launch_ros.actions.Node(
             package='carla_waypoint_publisher',
             executable='carla_waypoint_publisher',
@@ -41,6 +53,18 @@ def generate_launch_description():
                 },
                 {
                     'role_name': launch.substitutions.LaunchConfiguration('role_name')
+                },
+                {
+                    "nbr_vehicles":launch.substitutions.LaunchConfiguration('nbr_vehicles')
+                },
+                {
+                    "nbr_walkers":launch.substitutions.LaunchConfiguration('nbr_walkers')
+                },
+                {
+                    "nbr_frame":launch.substitutions.LaunchConfiguration('nbr_frame')
+                },
+                {
+                    "radius":launch.substitutions.LaunchConfiguration('radius')
                 }
             ]
         )
