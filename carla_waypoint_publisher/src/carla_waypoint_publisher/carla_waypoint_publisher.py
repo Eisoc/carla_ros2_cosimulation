@@ -35,7 +35,7 @@ from carla_waypoint_types.srv import GetWaypoint, GetActorWaypoint
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Path
 import random
-
+from ultralytics import YOLO
 
 # import about kitti
 import glob
