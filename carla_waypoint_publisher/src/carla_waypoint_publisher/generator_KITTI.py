@@ -573,8 +573,8 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id, 
 
         spawn_points = world.get_map().get_spawn_points()
         
-        # center = carla.Location(x=127, y= 195, z=0)
-        center = carla.Location(x=56, y= 129, z=0)
+        # center = carla.Location(x=127, y= 195, z=0) #01
+        center = carla.Location(x=56, y= 129, z=0)   #10
         # care: my sapwn point of ego is actually 127.4,-195.2,2, but in carla y is = -y 
         # radius = 150
         # 过滤出在圆内的生成点
@@ -670,28 +670,35 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id, 
         # world.tick()  # Update world state here
         walkers_list=[]
         
-        """
+        
         # establish 1 walker
-        loc=carla.Location(x=53, y= 120, z=3)
+        """
+        loc=carla.Location(x=84.49207305908203, y=130.668701171875, z=1)
+        # loc=world.get_random_location_from_navigation()
         spawn_transform = carla.Transform()
         spawn_transform.location = loc
         walker_bp = random.choice(blueprintsWalkers)
         walker = world.spawn_actor(walker_bp, spawn_transform)
         walker_controller_bp = world.get_blueprint_library().find('controller.ai.walker')
-        walker_controller = world.spawn_actor(walker_controller_bp, carla.Transform(), walker)
-
+        walker_controller = world.spawn_actor(walker_controller_bp, carla.Transform(),walker)
+        world.tick()
         # 启动行人并设置其目的地
         walker_controller.start()
-        walker_controller.go_to_location(world.get_random_location_from_navigation())
+        # walker_controller.set_max_speed(3 + random.random())  # 设置行人速度（1-2 m/s）
+        walker_controller.set_max_speed(3)
+        #walker_controller.go_to_location(world.get_random_location_from_navigation())
+        walker_controller.go_to_location(carla.Location(x=84.49207305908203, y= 120, z= 0.1665496826171875))
         # walker_controller.go_to_location(carla.Location(x=60, y= 120))
-        
-        walker_controller.set_max_speed(30 + random.random())  # 设置行人速度（1-2 m/s）
+        world.tick()
+        print(walker_controller.is_alive, spawn_transform, walker_controller.get_location(),walker.get_transform().location,walker.get_velocity().length())
+
+
         if walker == None:
             print("11111111111111111111111111111111111111")
     
         """
 
-
+        walker_ctrl_list=[]
         for i in range(nbr_walkers):
         # 获取一个随机位置，用于生成行人
 
@@ -705,7 +712,7 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id, 
                 walker_bp = random.choice(blueprintsWalkers)
 
                 # 在选定的生成点生成行人
-                max_attempts = 10
+                max_attempts = 5
                 spawned_walker = None
 
                 for attempt in range(max_attempts):
@@ -724,22 +731,28 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id, 
                 
                 # walker = world.spawn_actor(walker_bp, spawn_transform)
                 
-
+                
 
                 # 创建并附加一个行人控制器
                 walker_controller_bp = world.get_blueprint_library().find('controller.ai.walker')
                 walker_controller = world.spawn_actor(walker_controller_bp, carla.Transform(), walker)
+                walker_ctrl_list.append(walker_controller)
+        
+        world.tick()
+        for walker_controller in walker_ctrl_list:
+            
+            
+            # 启动行人并设置其目的地
+            walker_controller.start()
+            walker_controller.go_to_location(world.get_random_location_from_navigation())
+            walker_controller.set_max_speed(1 + random.random())  # 设置行人速度（1-2 m/s）
 
-                # 启动行人并设置其目的地
-                walker_controller.start()
-                walker_controller.go_to_location(world.get_random_location_from_navigation())
-                walker_controller.set_max_speed(1 + random.random())  # 设置行人速度（1-2 m/s）
+            # 可选择将生成的行人和控制器添加到列表中，以便稍后引用
+            walkers_list.append({"walker": walker, "controller": walker_controller, "loc":(random_location.x,random_location.y,random_location.z) })
+        # world.wait_for_tick()
 
-                # 可选择将生成的行人和控制器添加到列表中，以便稍后引用
-                walkers_list.append({"walker": walker, "controller": walker_controller})
-        # world.tick()
-        print("established %d walkers" %(len(walkers_list)))
-
+        print("established %d walkers: %s" %(len(walkers_list),walkers_list))
+        
         """
         # -------------
         # Spawn Walkers

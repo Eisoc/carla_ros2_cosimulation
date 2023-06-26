@@ -73,7 +73,7 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='spawn_point',
-            # default_value='127.4,-195.2,2,0,0,180' #Town01,03
+            #default_value='127.4,-195.2,2,0,0,180' #Town01,03
             default_value='56,-129,2,0,0,180' #Town10
         ),
         launch.actions.DeclareLaunchArgument(
@@ -90,11 +90,11 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='nbr_vehicles',
-            default_value='10'
+            default_value='20'
         ),
         launch.actions.DeclareLaunchArgument(
             name='nbr_walkers',
-            default_value='0'
+            default_value='30'
         ),
         launch.actions.DeclareLaunchArgument(
             name='nbr_frame',

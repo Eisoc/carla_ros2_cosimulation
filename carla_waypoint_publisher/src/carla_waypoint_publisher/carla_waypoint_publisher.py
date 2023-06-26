@@ -34,6 +34,7 @@ from carla_msgs.msg import CarlaWorldInfo
 from carla_waypoint_types.srv import GetWaypoint, GetActorWaypoint
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Path
+import random
 
 
 # import about kitti
@@ -523,8 +524,8 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             for x in vehicles_id_list:
                 vehicles_list.append(x)
                 #must spawn npc after sensor established, or server will crash, out of time, maybe a bug
-                
-            self.first_call = False
+            
+
         # Export LiDAR to cam0 transformation
         # tf_lidar_cam0 = gen.transform_lidar_to_camera(lidar_transform, left_transform)
         # with open(folder_output+"/lidar_to_cam0.txt", 'w') as posfile:
@@ -594,7 +595,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 
                 if frame_current < 2:
                     print("Initializing!, frame = ", frame_current, self.world.get_settings().synchronous_mode)
-                    # return None # to debug
+                    # return # to debug
                     
                 else:
                     print("!Running loop for frame:", frame_current)
