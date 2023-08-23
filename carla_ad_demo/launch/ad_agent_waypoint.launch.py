@@ -51,7 +51,7 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='timeout',
-            default_value='20'
+            default_value='25'
         ),
         launch.actions.DeclareLaunchArgument(
             name='synchronous_mode_wait_for_vehicle_control_command',
@@ -94,7 +94,7 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='nbr_walkers',
-            default_value='30'
+            default_value='35'
         ),
         launch.actions.DeclareLaunchArgument(
             name='nbr_frame',

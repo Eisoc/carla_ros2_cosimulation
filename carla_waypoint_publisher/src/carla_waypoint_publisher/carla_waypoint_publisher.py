@@ -17,6 +17,7 @@ The calculated route is published on '/carla/<ROLE NAME>/waypoints'
 
 Additionally, services are provided to interface CARLA waypoints.
 """
+import shutil
 import math
 import sys
 import threading
@@ -95,6 +96,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         self.RGB_left = None
         self.RGB_right = None
         self.ins_segmc = None
+        self.vehicle_list = []
         # depth = gen.Depth(MyCar, world, actor_list, folder_output, right_transform)
         self.originDepth = None
         self.normals = None
@@ -347,7 +349,25 @@ class CarlaToRosWaypointConverter(CompatibleNode):
     # M-
     def vehicle_info_callback(self, msg):
         self.vehicle_id = msg.id  # 存储车辆的ID供后续使用
-        
+    
+    def clear_directory(self, directory_path):
+        if not os.path.exists(directory_path):
+            print(f"The directory {directory_path} does not exist.")
+            return
+
+        for filename in os.listdir(directory_path):
+            file_path = os.path.join(directory_path, filename)
+
+            try:
+                # if ordner,shutil.rmtree
+                if os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+                # if file, use os.remove
+                else:
+                    os.remove(file_path)
+            except Exception as e:
+                print(f"Failed to delete {file_path}. Reason: {e}")
+    
     def KITTI_gen(self):
     ############# NEW about KITTI
         # M- establish the vars and sensors, only once
@@ -497,6 +517,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         if self.first_call == True:
             
             self.first_call = False
+            self.clear_directory(folder_output)
             gen.RGB_left.sensor_id_glob = 0
             gen.RGB_right.sensor_id_glob = 0
             gen.IS.sensor_id_glob = 10
@@ -523,6 +544,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             print("spawn points finished!")
             for x in vehicles_id_list:
                 vehicles_list.append(x)
+            self.vehicle_list = vehicles_list
                 #must spawn npc after sensor established, or server will crash, out of time, maybe a bug
             
 
@@ -580,7 +602,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 # depth.save()
                 self.originDepth.save()
                 self.SemSeg.save()
-                self.IMU.save(MyCar,vehicles_list)#Here also stored all vehicles location
+                self.IMU.save(MyCar,self.vehicle_list)#Here also stored all vehicles location
                 """
                 if MyCar.is_at_traffic_light():
                     traffic_light = MyCar.get_traffic_light()
@@ -657,7 +679,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         client.apply_batch([carla.command.DestroyActor(x) for x in all_walkers_id])
         print('done.!')
     '''
-        
+
 def main(args=None):
     """
     main function
