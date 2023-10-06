@@ -84,11 +84,40 @@ class Camera(Sensor):
             x.start()
             print("Export : "+file_path)
 
+            '''
             if self.sensor_id == 0:
                 with open(self.folder_output+"/full_ts_camera.txt", 'a') as file:
                     file.write(str(self.sensor_frame_id)+" "+str(data.timestamp - Sensor.initial_ts)+"\n") 
             self.sensor_frame_id += 1
+            '''
+            name = None
+            if self.sensor_id == 0:
+                name = '/camera_one.txt'
+            elif self.sensor_id ==1:
+                name = '/camera_two.txt'
+            elif self.sensor_id == 2:
+                name = '/camera_three.txt'
+            elif self.sensor_id==3:
+                name = '/camera_four.txt'
+            elif self.sensor_id==4:
+                name = '/camera_five.txt'
+            elif self.sensor_id==5:
+                name = '/camera_six.txt'
+            elif self.sensor_id==6:
+                name = '/camera_seven.txt'
+            elif self.sensor_id==7:
+                name = '/camera_eight.txt'
+            else:
+                pass
+            if name:
+                with open(self.folder_output+name, 'a') as fullpose:
+                    MyrgbMatrix = carla.Transform.get_matrix(data.transform)
+                    print("%05d"%(self.sensor_frame_id)+","+(str(MyrgbMatrix[0][0]) + "," + str(MyrgbMatrix[0][1]) + "," + str(MyrgbMatrix[0][2]) + "," + str(MyrgbMatrix[0][3]) + "," +\
+                        str(MyrgbMatrix[1][0]) + "," + str(MyrgbMatrix[1][1]) + "," + str(MyrgbMatrix[1][2]) + "," + str(MyrgbMatrix[1][3]) + "," +\
+                        str(MyrgbMatrix[2][0]) + "," + str(MyrgbMatrix[2][1]) + "," + str(MyrgbMatrix[2][2]) + "," + str(MyrgbMatrix[2][3])),file=fullpose)
 
+            self.sensor_frame_id += 1
+'''
 class RGB_left(Camera):
     sensor_id_glob = 0
 
@@ -102,7 +131,7 @@ class RGB_left(Camera):
         #camera_bp.set_attribute('image_size_y', '1024')
         camera_bp.set_attribute('image_size_x', '696')
         camera_bp.set_attribute('image_size_y', '512')
-        camera_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
+        camera_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
         camera_bp.set_attribute('enable_postprocess_effects', 'True')
         camera_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
         camera_bp.set_attribute('gamma', '2.2')
@@ -149,7 +178,225 @@ class RGB_right(Camera):
      
     def save(self):
         Camera.save(self)
+'''
 
+class RGB_one(Camera):
+    sensor_id_glob = 0
+
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_bp = blueprint_library.find('sensor.camera.rgb')
+
+        camera_bp.set_attribute('image_size_x', '696')
+        camera_bp.set_attribute('image_size_y', '512')
+        camera_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_bp.set_attribute('enable_postprocess_effects', 'True')
+        camera_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        camera_bp.set_attribute('gamma', '2.2')
+        camera_bp.set_attribute('motion_blur_intensity', '0')
+        camera_bp.set_attribute('motion_blur_max_distortion', '0')
+        camera_bp.set_attribute('motion_blur_min_object_screen_size', '0')
+        camera_bp.set_attribute('shutter_speed', '1000') #1 ms shutter_speed
+        camera_bp.set_attribute('lens_k', '0')
+        camera_bp.set_attribute('lens_kcube', '0')
+        camera_bp.set_attribute('lens_x_size', '0')
+        camera_bp.set_attribute('lens_y_size', '0')
+        return camera_bp
+     
+    def save(self):
+        Camera.save(self)
+class RGB_two(Camera):
+    sensor_id_glob = 0
+
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_bp = blueprint_library.find('sensor.camera.rgb')
+
+        camera_bp.set_attribute('image_size_x', '696')
+        camera_bp.set_attribute('image_size_y', '512')
+        camera_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_bp.set_attribute('enable_postprocess_effects', 'True')
+        camera_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        camera_bp.set_attribute('gamma', '2.2')
+        camera_bp.set_attribute('motion_blur_intensity', '0')
+        camera_bp.set_attribute('motion_blur_max_distortion', '0')
+        camera_bp.set_attribute('motion_blur_min_object_screen_size', '0')
+        camera_bp.set_attribute('shutter_speed', '1000') #1 ms shutter_speed
+        camera_bp.set_attribute('lens_k', '0')
+        camera_bp.set_attribute('lens_kcube', '0')
+        camera_bp.set_attribute('lens_x_size', '0')
+        camera_bp.set_attribute('lens_y_size', '0')
+        return camera_bp
+     
+    def save(self):
+        Camera.save(self)
+class RGB_three(Camera):
+    sensor_id_glob = 0
+
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_bp = blueprint_library.find('sensor.camera.rgb')
+
+        camera_bp.set_attribute('image_size_x', '696')
+        camera_bp.set_attribute('image_size_y', '512')
+        camera_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_bp.set_attribute('enable_postprocess_effects', 'True')
+        camera_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        camera_bp.set_attribute('gamma', '2.2')
+        camera_bp.set_attribute('motion_blur_intensity', '0')
+        camera_bp.set_attribute('motion_blur_max_distortion', '0')
+        camera_bp.set_attribute('motion_blur_min_object_screen_size', '0')
+        camera_bp.set_attribute('shutter_speed', '1000') #1 ms shutter_speed
+        camera_bp.set_attribute('lens_k', '0')
+        camera_bp.set_attribute('lens_kcube', '0')
+        camera_bp.set_attribute('lens_x_size', '0')
+        camera_bp.set_attribute('lens_y_size', '0')
+        return camera_bp
+     
+    def save(self):
+        Camera.save(self)
+class RGB_four(Camera):
+    sensor_id_glob = 0
+
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_bp = blueprint_library.find('sensor.camera.rgb')
+
+        camera_bp.set_attribute('image_size_x', '696')
+        camera_bp.set_attribute('image_size_y', '512')
+        camera_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_bp.set_attribute('enable_postprocess_effects', 'True')
+        camera_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        camera_bp.set_attribute('gamma', '2.2')
+        camera_bp.set_attribute('motion_blur_intensity', '0')
+        camera_bp.set_attribute('motion_blur_max_distortion', '0')
+        camera_bp.set_attribute('motion_blur_min_object_screen_size', '0')
+        camera_bp.set_attribute('shutter_speed', '1000') #1 ms shutter_speed
+        camera_bp.set_attribute('lens_k', '0')
+        camera_bp.set_attribute('lens_kcube', '0')
+        camera_bp.set_attribute('lens_x_size', '0')
+        camera_bp.set_attribute('lens_y_size', '0')
+        return camera_bp
+     
+    def save(self):
+        Camera.save(self)
+class RGB_five(Camera):
+    sensor_id_glob = 0
+
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_bp = blueprint_library.find('sensor.camera.rgb')
+
+        camera_bp.set_attribute('image_size_x', '696')
+        camera_bp.set_attribute('image_size_y', '512')
+        camera_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_bp.set_attribute('enable_postprocess_effects', 'True')
+        camera_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        camera_bp.set_attribute('gamma', '2.2')
+        camera_bp.set_attribute('motion_blur_intensity', '0')
+        camera_bp.set_attribute('motion_blur_max_distortion', '0')
+        camera_bp.set_attribute('motion_blur_min_object_screen_size', '0')
+        camera_bp.set_attribute('shutter_speed', '1000') #1 ms shutter_speed
+        camera_bp.set_attribute('lens_k', '0')
+        camera_bp.set_attribute('lens_kcube', '0')
+        camera_bp.set_attribute('lens_x_size', '0')
+        camera_bp.set_attribute('lens_y_size', '0')
+        return camera_bp
+     
+    def save(self):
+        Camera.save(self)
+class RGB_six(Camera):
+    sensor_id_glob = 0
+
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_bp = blueprint_library.find('sensor.camera.rgb')
+
+        camera_bp.set_attribute('image_size_x', '696')
+        camera_bp.set_attribute('image_size_y', '512')
+        camera_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_bp.set_attribute('enable_postprocess_effects', 'True')
+        camera_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        camera_bp.set_attribute('gamma', '2.2')
+        camera_bp.set_attribute('motion_blur_intensity', '0')
+        camera_bp.set_attribute('motion_blur_max_distortion', '0')
+        camera_bp.set_attribute('motion_blur_min_object_screen_size', '0')
+        camera_bp.set_attribute('shutter_speed', '1000') #1 ms shutter_speed
+        camera_bp.set_attribute('lens_k', '0')
+        camera_bp.set_attribute('lens_kcube', '0')
+        camera_bp.set_attribute('lens_x_size', '0')
+        camera_bp.set_attribute('lens_y_size', '0')
+        return camera_bp
+     
+    def save(self):
+        Camera.save(self)
+class RGB_seven(Camera):
+    sensor_id_glob = 0
+
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_bp = blueprint_library.find('sensor.camera.rgb')
+
+        camera_bp.set_attribute('image_size_x', '696')
+        camera_bp.set_attribute('image_size_y', '512')
+        camera_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_bp.set_attribute('enable_postprocess_effects', 'True')
+        camera_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        camera_bp.set_attribute('gamma', '2.2')
+        camera_bp.set_attribute('motion_blur_intensity', '0')
+        camera_bp.set_attribute('motion_blur_max_distortion', '0')
+        camera_bp.set_attribute('motion_blur_min_object_screen_size', '0')
+        camera_bp.set_attribute('shutter_speed', '1000') #1 ms shutter_speed
+        camera_bp.set_attribute('lens_k', '0')
+        camera_bp.set_attribute('lens_kcube', '0')
+        camera_bp.set_attribute('lens_x_size', '0')
+        camera_bp.set_attribute('lens_y_size', '0')
+        return camera_bp
+     
+    def save(self):
+        Camera.save(self)
+class RGB_eight(Camera):
+    sensor_id_glob = 0
+
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_bp = blueprint_library.find('sensor.camera.rgb')
+
+        camera_bp.set_attribute('image_size_x', '696')
+        camera_bp.set_attribute('image_size_y', '512')
+        camera_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_bp.set_attribute('enable_postprocess_effects', 'True')
+        camera_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        camera_bp.set_attribute('gamma', '2.2')
+        camera_bp.set_attribute('motion_blur_intensity', '0')
+        camera_bp.set_attribute('motion_blur_max_distortion', '0')
+        camera_bp.set_attribute('motion_blur_min_object_screen_size', '0')
+        camera_bp.set_attribute('shutter_speed', '1000') #1 ms shutter_speed
+        camera_bp.set_attribute('lens_k', '0')
+        camera_bp.set_attribute('lens_kcube', '0')
+        camera_bp.set_attribute('lens_x_size', '0')
+        camera_bp.set_attribute('lens_y_size', '0')
+        return camera_bp
+     
+    def save(self):
+        Camera.save(self)
+'''
 class IS(Camera):
     sensor_id_glob = 10
     def __init__(self, vehicle, world, actor_list, folder_output, transform):
@@ -164,6 +411,136 @@ class IS(Camera):
         camera_is_bp.set_attribute('image_size_y', '512')
         camera_is_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
         camera_is_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
+        return camera_is_bp
+
+    def save(self):
+        Camera.save(self)
+'''
+
+class IS_one(Camera):
+    sensor_id_glob = 10
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_is_bp = blueprint_library.find('sensor.camera.instance_segmentation')
+
+        camera_is_bp.set_attribute('image_size_x', '696')
+        camera_is_bp.set_attribute('image_size_y', '512')
+        camera_is_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_is_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_is_bp
+
+    def save(self):
+        Camera.save(self)
+class IS_two(Camera):
+    sensor_id_glob = 10
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_is_bp = blueprint_library.find('sensor.camera.instance_segmentation')
+
+        camera_is_bp.set_attribute('image_size_x', '696')
+        camera_is_bp.set_attribute('image_size_y', '512')
+        camera_is_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_is_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_is_bp
+
+    def save(self):
+        Camera.save(self)
+class IS_three(Camera):
+    sensor_id_glob = 10
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_is_bp = blueprint_library.find('sensor.camera.instance_segmentation')
+
+        camera_is_bp.set_attribute('image_size_x', '696')
+        camera_is_bp.set_attribute('image_size_y', '512')
+        camera_is_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_is_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_is_bp
+
+    def save(self):
+        Camera.save(self)
+class IS_four(Camera):
+    sensor_id_glob = 10
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_is_bp = blueprint_library.find('sensor.camera.instance_segmentation')
+
+        camera_is_bp.set_attribute('image_size_x', '696')
+        camera_is_bp.set_attribute('image_size_y', '512')
+        camera_is_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_is_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_is_bp
+
+    def save(self):
+        Camera.save(self)
+class IS_five(Camera):
+    sensor_id_glob = 10
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_is_bp = blueprint_library.find('sensor.camera.instance_segmentation')
+
+        camera_is_bp.set_attribute('image_size_x', '696')
+        camera_is_bp.set_attribute('image_size_y', '512')
+        camera_is_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_is_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_is_bp
+
+    def save(self):
+        Camera.save(self)
+class IS_six(Camera):
+    sensor_id_glob = 10
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_is_bp = blueprint_library.find('sensor.camera.instance_segmentation')
+
+        camera_is_bp.set_attribute('image_size_x', '696')
+        camera_is_bp.set_attribute('image_size_y', '512')
+        camera_is_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_is_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_is_bp
+
+    def save(self):
+        Camera.save(self)
+class IS_seven(Camera):
+    sensor_id_glob = 10
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_is_bp = blueprint_library.find('sensor.camera.instance_segmentation')
+
+        camera_is_bp.set_attribute('image_size_x', '696')
+        camera_is_bp.set_attribute('image_size_y', '512')
+        camera_is_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_is_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_is_bp
+
+    def save(self):
+        Camera.save(self)
+class IS_eight(Camera):
+    sensor_id_glob = 10
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_is_bp = blueprint_library.find('sensor.camera.instance_segmentation')
+
+        camera_is_bp.set_attribute('image_size_x', '696')
+        camera_is_bp.set_attribute('image_size_y', '512')
+        camera_is_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_is_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
         return camera_is_bp
 
     def save(self):
@@ -183,14 +560,14 @@ class Depth(Camera):
         
         camera_ss_bp.set_attribute('image_size_x', '696')
         camera_ss_bp.set_attribute('image_size_y', '512')
-        camera_ss_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
         camera_ss_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
         return camera_ss_bp
 
     def save(self):
         cc = carla.ColorConverter.LogarithmicDepth
         Camera.save(self,cc)
-
+'''
 class Original_Depth(Camera):
     sensor_id_glob = 20
     def __init__(self, vehicle, world, actor_list, folder_output, transform):
@@ -203,14 +580,14 @@ class Original_Depth(Camera):
         #camera_ss_bp.set_attribute('image_size_y', '1024')
         
         camera_ss_bp.set_attribute('image_size_x', '696')
-        camera_ss_bp.set_attribute('image_size_y', '512')
-        camera_ss_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
-        camera_ss_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
+        camera_ss_bp.set_attribute('image_size_camera_one_transformy', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.50') # 10Hz camera
         return camera_ss_bp
 
     def save(self):
         Camera.save(self)
-        
+'''
 class Normal(Camera):
     sensor_id_glob = 20
     def __init__(self, vehicle, world, actor_list, folder_output, transform):
@@ -233,7 +610,265 @@ class Normal(Camera):
     def save(self):
         Camera.save(self)
 
+class Original_Depth_one(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
 
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.depth')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Original_Depth_two(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.depth')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Original_Depth_three(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.depth')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Original_Depth_four(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.depth')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Original_Depth_five(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.depth')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Original_Depth_six(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.depth')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Original_Depth_seven(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.depth')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Original_Depth_eight(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.depth')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.10') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+'''
+class Normal_one(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.normals')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.50') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Normal_two(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.normals')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.50') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Normal_three(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.normals')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.50') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Normal_four(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.normals')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.50') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Normal_five(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.normals')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.50') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Normal_six(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.normals')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.50') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Normal_seven(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.normals')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.50') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+class Normal_eight(Camera):
+    sensor_id_glob = 20
+    def __init__(self, vehicle, world, actor_list, folder_output, transform):
+        Camera.__init__(self, vehicle, world, actor_list, folder_output, transform)
+
+    def set_attributes(self, blueprint_library):
+        camera_ss_bp = blueprint_library.find('sensor.camera.normals')
+
+        camera_ss_bp.set_attribute('image_size_x', '696')
+        camera_ss_bp.set_attribute('image_size_y', '512')
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('sensor_tick', '0.50') # 2Hz camera
+        return camera_ss_bp
+
+    def save(self):
+        Camera.save(self)
+
+'''
 
 class SS(Camera):
     sensor_id_glob = 10
@@ -248,7 +883,7 @@ class SS(Camera):
         
         camera_ss_bp.set_attribute('image_size_x', '696')
         camera_ss_bp.set_attribute('image_size_y', '512')
-        camera_ss_bp.set_attribute('fov', '72') #72 degrees # Always fov on width even if width is different than height
+        camera_ss_bp.set_attribute('fov', '90') #72 degrees # Always fov on width even if width is different than height
         camera_ss_bp.set_attribute('sensor_tick', '0.10') # 10Hz camera
         return camera_ss_bp
 
@@ -554,13 +1189,27 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id, 
         traffic_manager.set_synchronous_mode(True)
         synchronous_master = True
 
-        blueprints = world.get_blueprint_library().filter('vehicle.*')
+        #blueprints = world.get_blueprint_library().filter('vehicle.*')
+        
+        
+        b2 = world.get_blueprint_library().filter('vehicle.carlamotors.firetruck')
+        b3 =  world.get_blueprint_library().filter('vehicle.carlamotors.carlacola')
+        b4 =  world.get_blueprint_library().filter('vehicle.volkswagen.t2')
+        #b5 =  world.get_blueprint_library().filter('vehicle.volkswagen.t2_2021')
+        b6 = world.get_blueprint_library().filter('vehicle.citroen.c3')
+        blueprints = list(b3)
+        # blueprints.extend(list(world.get_blueprint_library().filter('vehicle.carlamotors.firetruck')))
+        #blueprints.extend(list(b3))
+        blueprints.extend(list(b2))
+        blueprints.extend(list(b6))
+    
         # blueprints_walker = world.get_blueprint_library().filter('walker.*')
         #blueprints = world.get_blueprint_library().filter('vehicle.carlamotors.firetruck')
         # blueprints += world.get_blueprint_library().filter('vehicle.tesla.cybertruck')
         
         blueprintsWalkers = world.get_blueprint_library().filter('walker.pedestrian.*')
 
+        '''
         safe = True
         if safe:
                 blueprints = [x for x in blueprints if int(x.get_attribute('number_of_wheels')) == 4]
@@ -570,7 +1219,8 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id, 
                 blueprints = [x for x in blueprints if not x.id.endswith('t2')]
 
         blueprints = sorted(blueprints, key=lambda bp: bp.id)
-
+        '''
+        
         spawn_points = world.get_map().get_spawn_points()
         
         # center = carla.Location(x=127, y= 195, z=0) #01
@@ -665,7 +1315,7 @@ def spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_list, all_walkers_id, 
         # r<50, allow physics
         traffic_manager.global_percentage_speed_difference(-180)
         # allow overspeed. 180%
-        traffic_manager.set_global_distance_to_leading_vehicle(3.0)   
+        traffic_manager.set_global_distance_to_leading_vehicle(6.0)   
 
         # world.tick()  # Update world state here
         walkers_list=[]

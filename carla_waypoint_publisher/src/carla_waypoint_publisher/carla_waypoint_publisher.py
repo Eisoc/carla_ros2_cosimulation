@@ -96,7 +96,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         self.RGB_left = None
         self.RGB_right = None
         self.ins_segmc = None
-        self.vehicle_list = []
+        self.vehicles_list = []
         # depth = gen.Depth(MyCar, world, actor_list, folder_output, right_transform)
         self.originDepth = None
         self.normals = None
@@ -501,14 +501,24 @@ class CarlaToRosWaypointConverter(CompatibleNode):
         while world.get_snapshot().timestamp.elapsed_seconds-start < time_stop: world.tick()
         print("MyCar stopped")
         '''
-        
+        '''
         # Set sensors transformation from MyCar
         lidar_transform     = carla.Transform(carla.Location(x=0, y=0, z=1.80))
         left_transform = carla.Transform(carla.Location(x=2.0, y=-0.2, z=1.4))
         right_transform = carla.Transform(carla.Location(x=2.0, y=0.2, z=1.4))
         with open(folder_output+"/start_pose.txt", 'a') as pose :
             print("left camera pose: " + str(left_transform)+ "right camera pose: " + str(right_transform),file=pose)
-
+        '''
+        lidar_transform     = carla.Transform(carla.Location(x=0, y=0, z=2.5))
+        camera_one_transform = carla.Transform(carla.Location(x=0.5,y=0.0,z=2.5))
+        camera_two_transform = carla.Transform(carla.Location(x=0.25,y=0.5,z=2.5),carla.Rotation(0.0,45.0,0.0))
+        camera_three_transform = carla.Transform(carla.Location(x=0.0,y=0.5,z=2.5),carla.Rotation(0.0,90.0,0.0))
+        camera_four_transform = carla.Transform(carla.Location(x=-0.25,y=0.5,z=2.5),carla.Rotation(0.0,135.0,0.0))
+        camera_five_transform = carla.Transform(carla.Location(x=-0.5,y=0,z=2.5),carla.Rotation(0.0,180.0,0.0))
+        camera_six_transform = carla.Transform(carla.Location(x=-0.25,y=-0.5,z=2.5),carla.Rotation(0.0,225.0,0.0))
+        camera_seven_transform = carla.Transform(carla.Location(x=0.,y=-0.5,z=2.5),carla.Rotation(0.0,270.0,0.0))
+        camera_eight_transform = carla.Transform(carla.Location(x=0.25,y=-0.5,z=2.5),carla.Rotation(0.0,315.0,0.0))
+        
         # Take a screenshot#We dont need this
         #gen.screenshot(MyCar, world, actor_list, folder_output, carla.Transform(carla.Location(x=0.0, y=0, z=2.0), carla.Rotation(pitch=0, yaw=0, roll=0)))
 
@@ -518,10 +528,12 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             
             self.first_call = False
             self.clear_directory(folder_output)
+            gen.Depth.sensor_id_glob = 20
+            '''
             gen.RGB_left.sensor_id_glob = 0
             gen.RGB_right.sensor_id_glob = 0
             gen.IS.sensor_id_glob = 10
-            gen.Depth.sensor_id_glob = 20
+            
             gen.HDL64E.sensor_id_glob = 100
             gen.IMU.sensor_id_glob = 0
             gen.Optical.sensor_id_glob = 0
@@ -532,19 +544,109 @@ class CarlaToRosWaypointConverter(CompatibleNode):
             self.ins_segmc = gen.IS(MyCar, world, actor_list, folder_output, right_transform)
             # depth = gen.Depth(MyCar, world, actor_list, folder_output, right_transform)
             self.originDepth = gen.Original_Depth(MyCar, world, actor_list, folder_output, right_transform)
-            self.normals = gen.Normal(MyCar, world, actor_list, folder_output, right_transform)
+            
             self.optical = gen.Optical(MyCar, world, actor_list, folder_output, right_transform)
             self.IMU = gen.IMU(MyCar, world, actor_list, folder_output, right_transform)
             print("sensors. imu and ss,last test!")
-            self.SemSeg = gen.SS(MyCar, world, actor_list, folder_output, right_transform)
-    
+            '''
+            
+            #self.SemSeg = gen.SS(MyCar, world, actor_list, folder_output, right_transform)
+            gen.RGB_one.sensor_id_glob = 0
+            #gen.RGB_two.sensor_id_glob = 1
+            gen.RGB_three.sensor_id_glob=2
+            #gen.RGB_four.sensor_id_glob=3
+            gen.RGB_five.sensor_id_glob=4
+            #gen.RGB_six.sensor_id_glob=5
+            gen.RGB_seven.sensor_id_glob=6
+            #gen.RGB_eight.sensor_id_glob=7
+
+            gen.IS_one.sensor_id_glob = 10
+            #gen.IS_two.sensor_id_glob = 11
+            gen.IS_three.sensor_id_glob = 12
+            #gen.IS_four.sensor_id_glob = 13
+            gen.IS_five.sensor_id_glob = 14
+            #gen.IS_six.sensor_id_glob = 15
+            gen.IS_seven.sensor_id_glob = 16
+            #gen.IS_eight.sensor_id_glob = 17
+
+            gen.Original_Depth_one.sensor_id_glob = 30
+            #gen.Original_Depth_two.sensor_id_glob = 31
+            gen.Original_Depth_three.sensor_id_glob = 32
+            #gen.Original_Depth_four.sensor_id_glob = 33
+            gen.Original_Depth_five.sensor_id_glob= 34
+            #gen.Original_Depth_six.sensor_id_glob= 35
+            gen.Original_Depth_seven.sensor_id_glob= 36
+            #gen.Original_Depth_eight.sensor_id_glob= 37
+            '''
+            gen.Normal_one.sensor_id_glob = 40
+            gen.Normal_two.sensor_id_glob = 41
+            gen.Normal_three.sensor_id_glob = 42
+            gen.Normal_four.sensor_id_glob = 43
+            gen.Normal_five.sensor_id_glob = 44
+            gen.Normal_six.sensor_id_glob = 45
+            gen.Normal_seven.sensor_id_glob = 46
+            gen.Normal_eight.sensor_id_glob = 47
+            '''
+
+            gen.Depth.sensor_id_glob = 20
+            gen.HDL64E.sensor_id_glob = 100
+            gen.IMU.sensor_id_glob = 0
+            gen.Optical.sensor_id_glob = 0
+
+            
+            self.normals = gen.Normal(MyCar, world, actor_list, folder_output, camera_one_transform)
+            self.VelodyneHDL64 = gen.HDL64E(MyCar, world, actor_list, folder_output, lidar_transform)
+            self.RGB_one = gen.RGB_one(MyCar, world, actor_list, folder_output, camera_one_transform)
+            #self.RGB_two = gen.RGB_two(MyCar, world, actor_list, folder_output, camera_two_transform)
+            self.RGB_three= gen.RGB_three(MyCar, world, actor_list, folder_output, camera_three_transform)
+
+            #self.RGB_four = gen.RGB_four(MyCar, world, actor_list, folder_output, camera_four_transform)
+
+            self.RGB_five = gen.RGB_five(MyCar, world, actor_list, folder_output, camera_five_transform)
+            #self.RGB_six = gen.RGB_six(MyCar, world, actor_list, folder_output, camera_six_transform)
+            self.RGB_seven = gen.RGB_seven(MyCar, world, actor_list, folder_output, camera_seven_transform)
+            #self.RGB_eight = gen.RGB_eight(MyCar, world, actor_list, folder_output, camera_eight_transform)
+
+            self.ins_segmc_one = gen.IS_one(MyCar, world, actor_list, folder_output, camera_one_transform)
+            #self.ins_segmc_two = gen.IS_two(MyCar, world, actor_list, folder_output, camera_two_transform)
+            self.ins_segmc_three = gen.IS_three(MyCar, world, actor_list, folder_output, camera_three_transform)
+            #self.ins_segmc_four = gen.IS_four(MyCar, world, actor_list, folder_output, camera_four_transform)
+            self.ins_segmc_five = gen.IS_five(MyCar, world, actor_list, folder_output, camera_five_transform)
+            #self.ins_segmc_six = gen.IS_six(MyCar, world, actor_list, folder_output, camera_six_transform)
+            self.ins_segmc_seven = gen.IS_seven(MyCar, world, actor_list, folder_output, camera_seven_transform)
+            #self.ins_segmc_eight = gen.IS_eight(MyCar, world, actor_list, folder_output, camera_eight_transform)
+            # depth = gen.Depth(MyCar, world, actor_list, folder_output, right_transform)
+            self.originDepth_one = gen.Original_Depth_one(MyCar, world, actor_list, folder_output, camera_one_transform)
+            #self.originDepth_two = gen.Original_Depth_two(MyCar, world, actor_list, folder_output, camera_two_transform)
+            self.originDepth_three = gen.Original_Depth_three(MyCar, world, actor_list, folder_output, camera_three_transform)
+            #self.originDepth_four = gen.Original_Depth_four(MyCar, world, actor_list, folder_output, camera_four_transform)
+            self.originDepth_five = gen.Original_Depth_five(MyCar, world, actor_list, folder_output, camera_five_transform)
+            #self.originDepth_six = gen.Original_Depth_six(MyCar, world, actor_list, folder_output, camera_six_transform)
+            self.originDepth_seven = gen.Original_Depth_seven(MyCar, world, actor_list, folder_output, camera_seven_transform)
+            #self.originDepth_eight = gen.Original_Depth_eight(MyCar, world, actor_list, folder_output, camera_eight_transform)
+            '''
+            self.normals_one = gen.Normal_one(MyCar, world, actor_list, folder_output, camera_one_transform)
+            self.normals_two = gen.Normal_two(MyCar, world, actor_list, folder_output, camera_two_transform)
+            self.normals_three = gen.Normal_three(MyCar, world, actor_list, folder_output, camera_three_transform)
+            self.normals_four = gen.Normal_four(MyCar, world, actor_list, folder_output, camera_four_transform)
+            self.normals_five = gen.Normal_five(MyCar, world, actor_list, folder_output, camera_five_transform)
+            self.normals_six = gen.Normal_six(MyCar, world, actor_list, folder_output, camera_six_transform)
+            self.normals_seven = gen.Normal_seven(MyCar, world, actor_list, folder_output, camera_seven_transform)
+            self.normals_eight = gen.Normal_eight(MyCar, world, actor_list, folder_output, camera_eight_transform)
+            '''
+            #optical = gen.Optical(MyCar, world, actor_list, folder_output, camera_one_transform)
+            self.IMU = gen.IMU(MyCar, world, actor_list, folder_output, camera_one_transform)
+            
+            
+            
+            
             print("sensors established, first call finished")
             vehicles_id_list = gen.spawn_npc(client, nbr_vehicles, nbr_walkers, vehicles_id_list, all_walkers_id, self.radius)
             print(vehicles_id_list)
             print("spawn points finished!")
             for x in vehicles_id_list:
                 vehicles_list.append(x)
-            self.vehicle_list = vehicles_list
+            self.vehicles_list = vehicles_list
                 #must spawn npc after sensor established, or server will crash, out of time, maybe a bug
             
 
@@ -592,8 +694,10 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 self.frame_recorder = frame_current # get the value of last loop
                 
                 frame_current = self.VelodyneHDL64.save()
-                self.normals.save() #Store location for Mycar
                 
+                
+                self.normals.save() #Store location for Mycar
+                '''
                 # M- OP and IS not supported
                 self.optical.save()
                 self.RGB_left.save()
@@ -603,13 +707,52 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                 self.originDepth.save()
                 self.SemSeg.save()
                 self.IMU.save(MyCar,self.vehicle_list)#Here also stored all vehicles location
+                '''
                 """
                 if MyCar.is_at_traffic_light():
                     traffic_light = MyCar.get_traffic_light()
                     if traffic_light.get_state() == carla.TrafficLightState.Red:
                         traffic_light.set_state(carla.TrafficLightState.Green)
                 """
+                '''
+                self.normals_one.save() #Store location for Mycar
+                self.normals_two.save() 
+                self.normals_three.save() 
+                self.normals_four.save() 
+                self.normals_five.save() 
+                self.normals_six.save() 
+                self.normals_seven.save() 
+                self.normals_eight.save() 
+                '''
+                #optical.save()
+                self.RGB_one.save()
+                #self.RGB_two.save()
+                self.RGB_three.save()
+                #self.RGB_four.save()
+                self.RGB_five.save()
+                #self.RGB_six.save()
+                self.RGB_seven.save()
+                #self.RGB_eight.save()
 
+                self.ins_segmc_one.save()
+                #self.ins_segmc_two.save()
+                self.ins_segmc_three.save()
+                #self.ins_segmc_four.save()
+                self.ins_segmc_five.save()
+                #self.ins_segmc_six.save()
+                self.ins_segmc_seven.save()
+                #self.ins_segmc_eight.save()
+                # depth.save()
+                self.originDepth_one.save()
+                #self.originDepth_two.save()
+                self.originDepth_three.save()
+                #self.originDepth_four.save()
+                self.originDepth_five.save()
+                #self.originDepth_six.save()
+                self.originDepth_seven.save()
+                #self.originDepth_eight.save()
+                #SemSeg.save()
+                self.IMU.save(MyCar, self.vehicles_list)#Here also stored all vehicles location
                 # All sensors produce first data at the same time (this ts)
                 gen.follow(MyCar.get_transform(), world)
                 
@@ -636,7 +779,7 @@ class CarlaToRosWaypointConverter(CompatibleNode):
                     self.world.tick()
                 
                 
-                time.sleep(0.1)
+                time.sleep(0.016)
                 # self.world.tick()    # Pass to the next simulator frame
                 
         #VelodyneHDL64.save_poses()

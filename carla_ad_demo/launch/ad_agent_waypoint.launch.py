@@ -65,7 +65,7 @@ def generate_launch_description():
         ########
         launch.actions.DeclareLaunchArgument(
             name='fixed_delta_seconds',
-            default_value='0.02'
+            default_value='0.04'
         ),
         launch.actions.DeclareLaunchArgument(
             name='role_name',
@@ -90,19 +90,19 @@ def generate_launch_description():
         ),
         launch.actions.DeclareLaunchArgument(
             name='nbr_vehicles',
-            default_value='20'
+            default_value='25'
         ),
         launch.actions.DeclareLaunchArgument(
             name='nbr_walkers',
-            default_value='35'
+            default_value='0'
         ),
         launch.actions.DeclareLaunchArgument(
             name='nbr_frame',
-            default_value='1000'
+            default_value='2000'
         ),
         launch.actions.DeclareLaunchArgument(
             name='radius',
-            default_value='150'
+            default_value='200'
         ),
         launch.actions.IncludeLaunchDescription(
             launch.launch_description_sources.PythonLaunchDescriptionSource(
